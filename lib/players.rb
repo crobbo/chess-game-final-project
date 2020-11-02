@@ -15,20 +15,54 @@ class Players
     @player2[:name] = gets.chomp
   end
 
-  def who_goes_first
-    heads_tails = { one: 'Heads', two: 'Tails'}
-    puts "Let's flip a coin. Winner chooses who goes first!"
+  def coin_flip
+    heads_tails = { 1 => 'Heads', 2 => 'Tails'}
+    puts "Let's flip a coin....Heads wins, Tails loses!"
     puts '1.....2.....3......FLIP!'
-    puts 'Player 1: For Tails choose enter 2, for Heads enter 1'
+    puts 'Player 1 take a guess! For Tails enter 2, for Heads enter 1'
     num = loop do
         puts 'enter a number'
         num = Integer(gets) rescue nil
         break num if num
-      
-        puts "you didn't enter a number..."
+
+        puts "you didn't enter a 1 or a 2..."
       end
   
       return heads_tails[num]
+  end
+
+  def who_goes_first
+    arr = ['Heads', 'Tails']
+    if coin_flip == arr.sample
+      puts "You Win!"
+      num = loop do
+        puts 'Enter 1 to play first or enter 2 to go second'
+        num = Integer(gets) rescue nil
+        break num if num
+
+        puts "you didn't enter a 1 or a 2..."
+      end
+      if num == 1 
+        @player1[:next_turn] = true
+      else
+        @player2[:next_turn] = true
+      end
+    else
+      puts "You Lose!"
+      num = loop do
+        puts 'Player 2 ==> enter 1 to play first or enter 2 to go second'
+        num = Integer(gets) rescue nil
+        break num if num
+
+        puts "you didn't enter a 1 or a 2..."
+      end
+      if num == 1 
+        @player2[:next_turn] = true
+      else
+        @player1[:next_turn] = true
+      end
+    end
+    binding.pry
   end
 end
 
