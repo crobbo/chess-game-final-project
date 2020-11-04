@@ -5,7 +5,6 @@ class Players
 
   def initialize
     @player1 = {name: '', next_turn: false}
-    @player2 = {name: '', next_turn: false}
   end
 
   def get_names
