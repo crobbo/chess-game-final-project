@@ -5,4 +5,3 @@ require_relative 'player'
 require_relative 'piece_properties'
 
 new_game = Game.new
-puts new_game.play

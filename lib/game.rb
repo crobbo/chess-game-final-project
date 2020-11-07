@@ -22,6 +22,14 @@ class Game
     end
   end
 
+  def obtain_coordinates
+    coordinates = []
+    puts 'Enter X coordinate:'
+    coordinates << user_input
+    puts 'Enter Y coordinate:'
+    coordinates << user_input
+  end
+
   def who_plays_first
     arr = [@player_one.player[:name], @player_two.player[:name]]
     sleep 2
@@ -33,9 +41,8 @@ class Game
     sleep 2
     puts 'Initiating start up'
     sleep 4
-    return arr.sample.upcase
+    arr.sample.upcase
   end
-
 
   def checkmate?
   end
@@ -54,5 +61,22 @@ class Game
   def valid_piece?
     # checks that chess peice belongs to user
   end
+
+  def continue
+    print "press any key to continue.."
+    STDIN.getch
+    print "            \r"
+  end
+
+  def user_input
+    num = loop do
+      num = Integer(gets) rescue nil
+      break num if num && num < 9 && num > 0
+
+      puts "you didn't enter a valid number..."
+    end
+
+    return num 
+ end
 
 end
