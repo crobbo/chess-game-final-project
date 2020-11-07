@@ -1,20 +1,11 @@
 require 'tty-table'
-require 'pry'
+
+# Builds chess board and places pieces in their correct starting position
 
 class Board
-  attr_accessor :table, :player_one, :player_two
+  attr_reader :new_board, :player_one, :player_two
+
   def initialize()
-    @table = TTY::Table.new do |t|
-      t << ["8", "", "", "", "", "", "", "", ""]
-      t << ["7", "", "", "", "", "", "", "", ""]
-      t << ["6", "", "", "", "", "", "", "", ""]
-      t << ["5", "", "", "", "", "", "", "", ""]
-      t << ["4", "", "", "", "", "", "", "", ""]
-      t << ["3", "", "", "", "", "", "", "", ""]
-      t << ["2", "", "", "", "", "", "", "", ""]
-      t << ["1", "", "", "", "", "", "", "", ""]
-      t << ["", "1", "2", "3", "4", "5", "6", "7", "8"]
-    end
 
     @player_one = [ 
       @pawn_one = {valid: true, coordinates: [1, 7], unicode: "\u265F", type: 'pawn'},
@@ -53,10 +44,21 @@ class Board
       @knight_two = {valid: true, coordinates: [7, 1], unicode: "\u2658", type: 'knight'},
       @rook_two = {valid: true, coordinates: [8, 1], unicode: "\u2656", type: 'rook'}
     ]
+    @new_board = setup()
   end
 
   def setup
-
+    table = TTY::Table.new do |t|
+      t << ["8", "", "", "", "", "", "", "", ""]
+      t << ["7", "", "", "", "", "", "", "", ""]
+      t << ["6", "", "", "", "", "", "", "", ""]
+      t << ["5", "", "", "", "", "", "", "", ""]
+      t << ["4", "", "", "", "", "", "", "", ""]
+      t << ["3", "", "", "", "", "", "", "", ""]
+      t << ["2", "", "", "", "", "", "", "", ""]
+      t << ["1", "", "", "", "", "", "", "", ""]
+      t << ["", "1", "2", "3", "4", "5", "6", "7", "8"]
+    end
     player_one[0..7].each_with_index do |v, index|
         table[1][index+1] << player_one[index][:unicode]
     end
@@ -70,11 +72,7 @@ class Board
     player_two[8..15].each_with_index do |v, index|
       table[7][index+1] << player_two[8 + index][:unicode]
     end
-
+    return table
   end
 
 end
-new_game = Board.new
-new_game.setup
-puts new_game.table.render(:unicode)
-
