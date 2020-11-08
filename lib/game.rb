@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-
+require 'pry'
 # Controls the gameplay
 class Game
   attr_reader :board, :player_one, :player_two
@@ -7,6 +7,10 @@ class Game
   def initialize()
     @start_game = Board.new
     @board = @start_game.new_board
+
+    @pieces_one = @start_game.player_one
+    @pieces_two = @start_game.player_two
+
     @player_one = Player.new
     @player_two = Player.new
   end
@@ -17,9 +21,18 @@ class Game
     puts "\nPlayer 2: "
     @player_two.ask_name
     puts "#{who_plays_first} GOES FIRST!"
+    binding.pry
     until checkmate?
       # game loops until checkmate
     end
+  end
+
+  def move_piece
+    # method which moves piece on the board
+  end
+
+  def select_piece
+    valid_piece?(obtain_coordinates)
   end
 
   def obtain_coordinates
@@ -41,7 +54,13 @@ class Game
     sleep 2
     puts 'Initiating start up'
     sleep 4
-    arr.sample.upcase
+    name = arr.sample
+    if @player_one.player[:name] == name
+      @player_one.player[:next_turn] = true
+    else
+      @player_two.player[:next_turn] = true
+    end
+    name.upcase
   end
 
   def checkmate?
@@ -58,8 +77,23 @@ class Game
     # checks the user inputed values to see if it's a valid chess move
   end
 
-  def valid_piece?
-    # checks that chess peice belongs to user
+  def valid_piece?(arr)
+    which_pieces = whos_turn? ? @pieces_one : @pieces_two
+
+    which_pieces.each do |piece|
+      if piece[:coordinates] == arr
+        puts true
+      end
+    end
+    nil
+  end
+
+  def whos_turn?
+    if @player_one.player[:next_turn]
+      true
+    else
+      false
+    end
   end
 
   def continue
