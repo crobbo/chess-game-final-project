@@ -1,29 +1,32 @@
 # frozen_string_literal: true
 require 'pry'
-
 # Controls the gameplay
 class Game
-  attr_reader :board
+  attr_reader :board, :player_one, :player_two
 
   def initialize()
     @start_game = Board.new
-    @board = @start_game.board
+    @board = @start_game.new_board
+
+    @pieces_one = @start_game.player_one
+    @pieces_two = @start_game.player_two
+
     @player_one = Player.new
     @player_two = Player.new
+
     @current_square = nil
     @destination_square = nil
   end
 
   def play
-
     puts 'Player 1:'
     @player_one.ask_name
     puts "\nPlayer 2: "
     @player_two.ask_name
     puts "#{who_plays_first} GOES FIRST!"
-
+    # binding.pry
     until checkmate?
-      # move_piece
+      move_piece
       @current_square = nil
       @destination_square = nil
     end
@@ -50,16 +53,16 @@ class Game
   end
 
   def move_piece
-    # @current_square = obtain_coordinates
-    # @destination_square = obtain_coordinates
+    @current_square = obtain_coordinates
+    @destination_square = obtain_coordinates
 
-    # if piece_exists?(@current_square) && valid_move?(@current_square)
-    #   # code to move piece on the board.
+    if piece_exists?(@current_square) && valid_move?(@current_square)
+      # code to move piece on the board.
     
-    # else
-    #   puts 'Not a valid move! Try again:'
-    #   move_piece
-    # end
+    else
+      puts 'Not a valid move! Try again:'
+      move_piece
+    end
   end
 
   def piece_exists?(arr)
@@ -73,6 +76,9 @@ class Game
   end
 
   def valid_move?
+    # can the piece move to this sqaure ?
+    # is the square empty and/or can the exisiting poiece be taken 
+
   end
 
   def obtain_coordinates
@@ -94,7 +100,7 @@ class Game
   end
 
   def print_board
-    # method to print TTY Table board
+    @board.render(:unicode)
   end
 
   def whos_turn?
