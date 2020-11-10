@@ -4,6 +4,5 @@ require_relative 'board'
 require_relative 'player'
 
 
-new_game = Game.new
-puts new_game.print_board
-new_game.play
+new_game = Game.new(Player.new, Player.new)
+p new_game.play

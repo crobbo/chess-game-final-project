@@ -1,8 +1,8 @@
 # stores methods for Rook class
 
-require_relative 'lib/pieces'
+require_relative 'piece'
 
-class Rook < Pieces
+class Rook < Piece
   def moves
    # Rooks can move anywhere vertically or horizontally
   end

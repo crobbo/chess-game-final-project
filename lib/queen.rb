@@ -1,8 +1,8 @@
 # stores methods for Queen class
 
-require_relative 'lib/pieces'
+require_relative 'piece'
 
-class Queen < Pieces
+class Queen < Piece
   def moves
     # Queen can move anywhere on the board.
   end

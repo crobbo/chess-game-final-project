@@ -1,8 +1,8 @@
 # stores methods for King class
 
-require_relative 'lib/pieces'
+require_relative 'piece'
 
-class King < Pieces
+class King < Piece
   def moves
     [
       [1, 1],

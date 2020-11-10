@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 require 'pry'
 # Controls the gameplay
+
 class Game
   attr_reader :board, :player_one, :player_two
 

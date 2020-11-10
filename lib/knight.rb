@@ -1,8 +1,8 @@
 # stores methods for Knight class
 
-require_relative 'lib/pieces'
+require_relative 'piece'
 
-class Knight < Pieces
+class Knight < Piece
   def moves
    # Rooks can move anywhere vertically or horizontally
   end

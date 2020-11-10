@@ -1,8 +1,8 @@
 # stores methods for Bishop class
 
-require_relative 'lib/pieces'
+require_relative 'piece'
 
-class Bishop < Pieces
+class Bishop < Piece
 
   def moves
     # bisho move diagonal so could be many diferent squares that it could move to

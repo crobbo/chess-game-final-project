@@ -3,19 +3,17 @@ require 'pry'
 
 # Controls the gameplay
 class Game
-  attr_reader :board
+  attr_reader :board, :player1, :player2
 
-  def initialize()
-    @start_game = Board.new
-    @board = @start_game.board
-    @player_one = Player.new
-    @player_two = Player.new
+  def initialize(player1, player2)
+    @board = Board.new(player1, player2).place_pieces
+    @player_one = player1
+    @player_two = player2
     @current_square = nil
     @destination_square = nil
   end
 
   def play
-
     puts 'Player 1:'
     @player_one.ask_name
     puts "\nPlayer 2: "
@@ -23,9 +21,21 @@ class Game
     puts "#{who_plays_first} GOES FIRST!"
 
     until checkmate?
-      # move_piece
+      move_piece
       @current_square = nil
       @destination_square = nil
+    end
+  end
+
+  def move_piece
+    puts "Select piece to move:"
+    @current_square = obtain_coordinates
+    puts "Select square to move to:"
+    @destination_square = obtain_coordinates
+    if @current_square.which_player == whos_turn && @destination_square.valid_move?(current_square) # check destination square is a valid square which @currentsquare can move to.
+    # Check to see if empty or contains opponents piece or players piece. If blank move piece if opponents pices delete their piece, else error message saying invalid piece
+    else
+      puts "false"
     end
   end
 
@@ -49,42 +59,24 @@ class Game
     name.upcase
   end
 
-  def move_piece
-    # @current_square = obtain_coordinates
-    # @destination_square = obtain_coordinates
-
-    # if piece_exists?(@current_square) && valid_move?(@current_square)
-    #   # code to move piece on the board.
-    
-    # else
-    #   puts 'Not a valid move! Try again:'
-    #   move_piece
-    # end
-  end
-
-  def piece_exists?(arr)
-    which_pieces = (whos_turn? == player_one) ? @pieces_one : @pieces_two
-    which_pieces.each do |piece|
-      if piece[:coordinates] == arr
-        return true
-      end
-    end
-    nil
-  end
-
-  def valid_move?
-  end
-
   def obtain_coordinates
     sleep 2
-    puts "\n"
-    coordinates = []
-    message = @current_square ? select_destination_message : select_piece_message
-    puts "#{whos_turn?.player[:name]}, #{message}"
     puts 'Enter X coordinate:'
-    coordinates << user_input
+    x = user_input
     puts 'Enter Y coordinate:'
-    coordinates << user_input
+    y = user_input
+    @board[8-y][x-1]
+  end
+
+  def user_input
+    num = loop do
+      num = Integer(gets) rescue nil
+      break num if num && num < 9 && num > 0
+
+      puts "you didn't enter a valid number..."
+    end
+
+    return num 
   end
 
   def checkmate?
@@ -97,7 +89,7 @@ class Game
     # method to print TTY Table board
   end
 
-  def whos_turn?
+  def whos_turn
     @player_one.player[:next_turn] ? @player_one : @player_two
   end
 
@@ -106,24 +98,4 @@ class Game
     STDIN.getch
     print "            \r"
   end
-
-  def select_piece_message
-    'which piece do you want to move?'
-  end
-
-  def select_destination_message
-    'which square do you want to move to?'
-  end
-
-  def user_input
-    num = loop do
-      num = Integer(gets) rescue nil
-      break num if num && num < 9 && num > 0
-
-      puts "you didn't enter a valid number..."
-    end
-
-    return num 
- end
-
 end

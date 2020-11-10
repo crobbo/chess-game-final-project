@@ -1,10 +1,10 @@
 # Store piece properties
 
 class Piece
-  attr_reader :which_player, :valid
+  attr_reader :which_player, :valid, :moves
 
-  def initialize
-    @which_player = :which_player
+  def initialize(player)
+    @which_player = player
     @valid = true
   end
 
