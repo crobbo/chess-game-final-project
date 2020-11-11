@@ -3,7 +3,7 @@ require 'pry'
 
 # Controls the gameplay
 class Game
-  attr_reader :board, :player1, :player2
+  attr_reader :board, :player1, :player2, :destination_coordinates
 
   def initialize(player1, player2)
     @board = Board.new(player1, player2).place_pieces
@@ -11,6 +11,8 @@ class Game
     @player_two = player2
     @current_square = nil
     @destination_square = nil
+    @current_square_coordinates = [] 
+    @destination_coordinates = []
   end
 
   def play
@@ -29,13 +31,19 @@ class Game
 
   def move_piece
     puts "Select piece to move:"
-    @current_square = obtain_coordinates
+    @current_square = obtain_current_square
     puts "Select square to move to:"
-    @destination_square = obtain_coordinates
-    if @current_square.which_player == whos_turn && @destination_square.valid_move?(current_square) # check destination square is a valid square which @currentsquare can move to.
-    # Check to see if empty or contains opponents piece or players piece. If blank move piece if opponents pices delete their piece, else error message saying invalid piece
-    else
-      puts "false"
+    @destination_square = obtain_destination_square
+    binding.pry
+    if @current_square.which_player == whos_turn && @destination_square == ''
+      binding.pry
+      if @current_square.valid_move?(@current_square_coordinates, @destination_coordinates)
+        @destination_square = @current_square
+        @current_square = ''
+      end 
+    elsif @current_square.which_player && @destination_square.which_player != whos_turn
+      if @current_square.valid_move?(@current_square_coordinates, @destination_coordinates)
+      end
     end
   end
 
@@ -58,13 +66,24 @@ class Game
     end
     name.upcase
   end
-
-  def obtain_coordinates
-    sleep 2
+  
+  def obtain_current_square
     puts 'Enter X coordinate:'
     x = user_input
     puts 'Enter Y coordinate:'
     y = user_input
+    @current_square_coordinates << x
+    @current_square_coordinates << y
+    @board[8-y][x-1]
+  end
+
+  def obtain_destination_square
+    puts 'Enter X coordinate:'
+    x = user_input
+    puts 'Enter Y coordinate:'
+    y = user_input
+    @destination_coordinates << (x)
+    @destination_coordinates << (y)
     @board[8-y][x-1]
   end
 

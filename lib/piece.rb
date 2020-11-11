@@ -8,7 +8,7 @@ class Piece
     @valid = true
   end
 
-  def valid_moves
+  def valid_move?(start_coordinates, destination_coordinates)
     raise NotImplementedError
   end
 

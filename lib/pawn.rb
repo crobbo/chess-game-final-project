@@ -14,8 +14,9 @@ class Pawn < Piece
     ]
   end
 
-  def valid_moves
+  def valid_move?(start_coordinates, destination_coordinates)
     # [0,1] will always be a valid move unless piece in fron belongs to the same player. 
+    binding.pry
   end
 
   def unicode
