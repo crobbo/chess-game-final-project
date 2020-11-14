@@ -1,9 +1,11 @@
 class Errors
+  attr_reader :invalid_move, :which_piece
+
   def invalid_move
-    puts "This is a not a valid move. Try again:"
+    puts 'TRY AGAIN, this is a not a valid move! '
   end
 
   def wrong_piece
-    puts "The square you chose does not contain your piece. Try again:"
+    puts 'TRY AGAIN, the square you chose does not contain your piece!'
   end
 end

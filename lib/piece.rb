@@ -3,7 +3,7 @@
 
 
 class Piece
-  attr_reader :which_player, :valid, :moves
+  attr_reader :which_player, :valid, :moves, :unicode
 
   def initialize(player)
     @which_player = player

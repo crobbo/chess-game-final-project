@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 require_relative 'board'
-require_relative 'erorros'
+require_relative 'errors'
 
 # Controls the gameplay
 class Game
@@ -14,7 +14,7 @@ class Game
     @finish_square = nil
     @start_coordinates = []
     @finish_coordinates = []
-    @erorrs = Eorros.new
+    @error = Errors.new
   end
 
   def play
@@ -25,8 +25,7 @@ class Game
     puts "#{who_plays_first} GOES FIRST!"
 
     until checkmate?
-      binding.pry
-      move_piece rescue false
+      move_piece
       @start_square = nil
       @finish_square = nil
     end
@@ -38,8 +37,8 @@ class Game
     puts 'Select square to move to:'
     @finish_square = obtain_finish_square
 
-    @errors.wrong_piece unless @start_square.which_player == whos_turn
-    @errors.invalid_move unless @start_square.valid_move?(@start_coordinates, @finish_coordinates, @board, whos_turn)
+    return @error.wrong_piece unless @start_square.which_player == whos_turn
+    return @error.invalid_move unless @start_square.valid_move?(@start_coordinates, @finish_coordinates, @board, whos_turn)
 
     @board[8 - @finish_coordinates[1]][@finish_coordinates[0] - 1] = @start_square
     @board[8 - @start_coordinates[1]][@start_coordinates[0] - 1] = ''
