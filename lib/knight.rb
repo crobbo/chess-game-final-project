@@ -16,6 +16,16 @@ class Knight < Piece
     ]
   end
 
+  def possible_moves(start_coordinates)
+    coordinates = []
+    moves.each do |i|
+      arr = [start_coordinates]
+      arr << i
+      coordinates << arr.transpose.map(&:sum)
+    end
+    coordinates
+  end
+
   def unicode
     "\u265E"
   end
