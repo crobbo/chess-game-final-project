@@ -18,6 +18,10 @@ class Piece
     raise NotImplementedError
   end
 
+  def possible_moves
+    raise NotImplementedError
+  end
+
   def unicode
     raise NotImplementedError
   end

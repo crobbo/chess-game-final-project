@@ -40,9 +40,14 @@ class Game
     return @error.wrong_piece unless @start_square.which_player == whos_turn
     return @error.invalid_move unless @start_square.valid_move?(@start_coordinates, @finish_coordinates, @board, whos_turn)
 
+    if @board[8 - @start_coordinates[1]][@start_coordinates[0] - 1] == ''
+      nil
+    else
+      @start_square.which_player.graveyard << @board[8 - @start_coordinates[1]][@start_coordinates[0] - 1]
+    end
+
     @board[8 - @finish_coordinates[1]][@finish_coordinates[0] - 1] = @start_square
     @board[8 - @start_coordinates[1]][@start_coordinates[0] - 1] = ''
-
   end
 
   def who_plays_first

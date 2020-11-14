@@ -56,6 +56,10 @@ class Pawn < Piece
     end
   end
 
+  def possible_moves
+  ## returns a nested array of coordinates of possible moves
+  end
+
   def unicode
     "\u265F"
   end
