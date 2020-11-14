@@ -1,18 +1,20 @@
 # frozen_string_literal: true
-require 'pry'
+require_relative 'board'
+require_relative 'erorros'
 
 # Controls the gameplay
 class Game
-  attr_reader :board, :player1, :player2, :destination_coordinates
+  attr_reader :board, :player1, :player2
 
   def initialize(player1, player2)
     @board = Board.new(player1, player2).place_pieces
     @player_one = player1
     @player_two = player2
-    @current_square = nil
-    @destination_square = nil
-    @current_square_coordinates = [] 
-    @destination_coordinates = []
+    @start_square = nil
+    @finish_square = nil
+    @start_coordinates = []
+    @finish_coordinates = []
+    @erorrs = Eorros.new
   end
 
   def play
@@ -23,32 +25,29 @@ class Game
     puts "#{who_plays_first} GOES FIRST!"
 
     until checkmate?
-      move_piece
-      @current_square = nil
-      @destination_square = nil
+      binding.pry
+      move_piece rescue false
+      @start_square = nil
+      @finish_square = nil
     end
   end
 
   def move_piece
-    puts "Select piece to move:"
-    @current_square = obtain_current_square
-    puts "Select square to move to:"
-    @destination_square = obtain_destination_square
-    binding.pry
-    if @current_square.which_player == whos_turn && @destination_square == ''
-      binding.pry
-      if @current_square.valid_move?(@current_square_coordinates, @destination_coordinates)
-        @destination_square = @current_square
-        @current_square = ''
-      end 
-    elsif @current_square.which_player && @destination_square.which_player != whos_turn
-      if @current_square.valid_move?(@current_square_coordinates, @destination_coordinates)
-      end
-    end
+    puts 'Select piece to move:'
+    @start_square = obtain_start_square
+    puts 'Select square to move to:'
+    @finish_square = obtain_finish_square
+
+    @errors.wrong_piece unless @start_square.which_player == whos_turn
+    @errors.invalid_move unless @start_square.valid_move?(@start_coordinates, @finish_coordinates, @board, whos_turn)
+
+    @board[8 - @finish_coordinates[1]][@finish_coordinates[0] - 1] = @start_square
+    @board[8 - @start_coordinates[1]][@start_coordinates[0] - 1] = ''
+
   end
 
   def who_plays_first
-    arr = [@player_one.player[:name], @player_two.player[:name]]
+    arr = [@player_one.data[:name], @player_two.data[:name]]
     # sleep 2
     puts "Computer will randomly select the first player..."
     # sleep 2
@@ -59,31 +58,31 @@ class Game
     puts 'Initiating start up'
     # sleep 4
     name = arr.sample
-    if @player_one.player[:name] == name
-      @player_one.player[:next_turn] = true
+    if @player_one.data[:name] == name
+      @player_one.data[:next_turn] = true
     else
-      @player_two.player[:next_turn] = true
+      @player_two.data[:next_turn] = true
     end
     name.upcase
   end
   
-  def obtain_current_square
+  def obtain_start_square
     puts 'Enter X coordinate:'
     x = user_input
     puts 'Enter Y coordinate:'
     y = user_input
-    @current_square_coordinates << x
-    @current_square_coordinates << y
+    @start_coordinates << x
+    @start_coordinates << y
     @board[8-y][x-1]
   end
 
-  def obtain_destination_square
+  def obtain_finish_square
     puts 'Enter X coordinate:'
     x = user_input
     puts 'Enter Y coordinate:'
     y = user_input
-    @destination_coordinates << (x)
-    @destination_coordinates << (y)
+    @finish_coordinates << (x)
+    @finish_coordinates << (y)
     @board[8-y][x-1]
   end
 
@@ -109,7 +108,7 @@ class Game
   end
 
   def whos_turn
-    @player_one.player[:next_turn] ? @player_one : @player_two
+    @player_one.data[:next_turn] ? @player_one : @player_two
   end
 
   def continue

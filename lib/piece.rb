@@ -1,5 +1,7 @@
 # Store piece properties
 
+
+
 class Piece
   attr_reader :which_player, :valid, :moves
 
@@ -8,7 +10,7 @@ class Piece
     @valid = true
   end
 
-  def valid_move?(start_coordinates, destination_coordinates)
+  def valid_move?(start_coordinates, destination_coordinates, board, player)
     raise NotImplementedError
   end
 

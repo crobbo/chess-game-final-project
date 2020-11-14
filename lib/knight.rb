@@ -4,7 +4,16 @@ require_relative 'piece'
 
 class Knight < Piece
   def moves
-   # Rooks can move anywhere vertically or horizontally
+    [ 
+      [-1, 2],
+      [-1, -2],
+      [1, 2],
+      [1, -2],
+      [-2, 1],
+      [-2, -1],
+      [2, 1],
+      [2, -1]
+    ]
   end
 
   def unicode
