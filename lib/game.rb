@@ -4,7 +4,7 @@ require_relative 'errors'
 
 # Controls the gameplay
 class Game
-  attr_reader :board, :player1, :player2
+  attr_accessor :board, :player_one, :player_one, :start_square, :finish_square, :start_coordinates, :finish_coordinates, :error
 
   def initialize(player1, player2)
     @board = Board.new(player1, player2).place_pieces
@@ -25,9 +25,11 @@ class Game
     puts "#{who_plays_first} GOES FIRST!"
 
     until checkmate?
-      move_piece
-      @start_square = nil
-      @finish_square = nil
+      unless move_piece
+        @error.invalid_move
+        move_piece
+      end
+      reset_variables
     end
   end
 
@@ -37,8 +39,8 @@ class Game
     puts 'Select square to move to:'
     @finish_square = obtain_finish_square
 
-    return @error.wrong_piece unless @start_square.which_player == whos_turn
-    return @error.invalid_move unless @start_square.valid_move?(@start_coordinates, @finish_coordinates, @board, whos_turn)
+    return false unless @start_square.which_player == whos_turn
+    return false unless @start_square.valid_move?(@start_coordinates, @finish_coordinates, @board, whos_turn)
 
     if @board[8 - @start_coordinates[1]][@start_coordinates[0] - 1] == ''
       nil
@@ -113,6 +115,13 @@ class Game
 
   def whos_turn
     @player_one.data[:next_turn] ? @player_one : @player_two
+  end
+
+  def reset_variables
+    @start_square = nil
+    @finish_square = nil
+    @start_coordinates = []
+    @finish_coordinates = []
   end
 
   def continue

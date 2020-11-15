@@ -16,6 +16,22 @@ class Knight < Piece
     ]
   end
 
+  def valid_move?(start_coordinates, finish_coordinates, board, player)
+    squares = possible_moves(start_coordinates)
+    # If finish square is empty, returns true or false whether piece can move there
+    if squares.include?(finish_coordinates) && board[8 - finish_coordinates[1]][finish_coordinates[0] - 1] == ''
+      true
+    # # If finish square contains opponents piece return true
+    elsif squares.include?(finish_coordinates) && board[8 - finish_coordinates[1]][finish_coordinates[0] - 1].which_player != player
+        true
+    # If finish square contains own players piece then return false. 
+    elsif squares.include?(finish_coordinates) && board[8 - finish_coordinates[1]][finish_coordinates[0] - 1].which_player == player 
+      false
+    else
+      false
+    end
+  end
+
   def possible_moves(start_coordinates)
     coordinates = []
     moves.each do |i|
