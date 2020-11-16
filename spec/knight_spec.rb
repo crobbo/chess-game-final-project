@@ -3,12 +3,12 @@ require '/home/chrisrobbo/Programming/chess-game-final-project/lib/game.rb'
 require '/home/chrisrobbo/Programming/chess-game-final-project/lib/player.rb'
 
 describe Knight do
-  # let(:game) { Game.new(Player.new(1), Player.new(2)) }
   let(:player_one) { Player.new(1) }
   let(:player_two) { Player.new(2) }
   let(:game) { Game.new(player_one, player_two) }
   
-  context "When player a chooses a piece to move & square to move to" do 
+  context "When a player selects Knight to move & destination square to move it to" do 
+
     it "returns false when destination square is already occupied by player's own piece" do
       player_one.data[:next_turn] = true
       game.board[2][2] = game.board[1][2] 
@@ -29,7 +29,7 @@ describe Knight do
       expect(start_square.valid_move?(start_coordinates, finish_coordinates, game.board, game.whos_turn)).to eq(true)
     end
 
-    it "returns true when destiantion square is empty" do
+    it "returns true when destination square contains opponents piece" do
       player_one.data[:next_turn] = true
       game.board[2][2] = game.board[7][1]
       game.board[7][1] = ''

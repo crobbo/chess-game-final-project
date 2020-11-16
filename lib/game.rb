@@ -18,12 +18,13 @@ class Game
   end
 
   def play
+    binding.pry
     puts 'Player 1:'
     @player_one.ask_name
     puts "\nPlayer 2: "
     @player_two.ask_name
     puts "#{who_plays_first} GOES FIRST!"
-
+    
     until checkmate?
       unless move_piece
         @error.invalid_move
