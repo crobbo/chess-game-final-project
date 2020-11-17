@@ -1,6 +1,6 @@
 require 'rspec/autorun'
-require '/home/chrisrobbo/Programming/chess-game-final-project/lib/game.rb'
-require '/home/chrisrobbo/Programming/chess-game-final-project/lib/player.rb'
+require_relative '../lib/game.rb'
+require_relative '../lib/player.rb'
 
 describe Knight do
   let(:player_one) { Player.new(1) }
