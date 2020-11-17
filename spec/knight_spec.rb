@@ -49,5 +49,11 @@ describe Knight do
       expect(start_square.valid_move?(start_coordinates, finish_coordinates, game.board, game.whos_turn)).to eq(false)
     end
 
+    it "returns an array of possible moves" do 
+      # player_two.data[:next_turn] = true
+      start_square = game.board[7][1]
+      expect(start_square.possible_moves([2,1])).to eq([[1, 3], [1, -1], [3, 3], [3, -1], [0, 2], [0, 0], [4, 2], [4, 0]]) 
+    end
+
   end
 end
