@@ -16,5 +16,12 @@ class Player
     @data[:name] = prompt.ask('What is your name?')
   end
 
-
+  def add_to_graveyard(chess, board)
+    if board[8 - chess.start_coordinates[1]][chess.start_coordinates[0] - 1] == ''
+      nil
+    else
+      @graveyard << board[8 - chess.start_coordinates[1]][chess.start_coordinates[0] - 1]
+    end
+  end
+  
 end

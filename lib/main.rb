@@ -5,4 +5,4 @@ require_relative 'player'
 
 
 new_game = Game.new(Player.new(1), Player.new(2))
-p new_game.play
+new_game.play

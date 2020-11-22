@@ -4,57 +4,56 @@ require_relative 'errors'
 
 # Controls the gameplay
 class Game
-  attr_accessor :board, :player_one, :player_one, :start_square, :finish_square, :start_coordinates, :finish_coordinates, :error
+  attr_reader :board
 
   def initialize(player1, player2)
-    @board = Board.new(player1, player2).place_pieces
+    @chess = Board.new(player1, player2)
     @player_one = player1
     @player_two = player2
-    @start_square = nil
-    @finish_square = nil
-    @start_coordinates = []
-    @finish_coordinates = []
     @error = Errors.new
   end
 
   def play
-    binding.pry
+    introduction
+    until checkmate?
+      binding.pry
+      valid_move
+      @chess.reset_variables
+    end
+  end
+
+  def introduction
+    @chess.place_pieces
     puts 'Player 1:'
     @player_one.ask_name
     puts "\nPlayer 2: "
     @player_two.ask_name
     puts "#{who_plays_first} GOES FIRST!"
-    
-    until checkmate?
-      unless move_piece
-        @error.invalid_move
-        move_piece
-      end
-      reset_variables
+  end
+
+  def valid_move
+    unless move_piece
+      binding.pry
+      @error.invalid_move
+      move_piece
     end
   end
 
   def move_piece
-    puts 'Select piece to move:'
-    @start_square = obtain_start_square
-    puts 'Select square to move to:'
-    @finish_square = obtain_finish_square
+    @chess.choose_coordinates
+    return false unless @chess.start_square.which_player == whos_turn  # checks player is moving piece which belongs to them
+    return false unless @chess.start_square.valid_move?(@chess.start_coordinates, @chess.finish_coordinates, @chess.board, whos_turn)
 
-    return false unless @start_square.which_player == whos_turn
-    return false unless @start_square.valid_move?(@start_coordinates, @finish_coordinates, @board, whos_turn)
+    whos_turn.add_to_graveyard(@chess, @chess.board)
+    adjust_board
+  end
 
-    if @board[8 - @start_coordinates[1]][@start_coordinates[0] - 1] == ''
-      nil
-    else
-      @start_square.which_player.graveyard << @board[8 - @start_coordinates[1]][@start_coordinates[0] - 1]
-    end
-
-    @board[8 - @finish_coordinates[1]][@finish_coordinates[0] - 1] = @start_square
-    @board[8 - @start_coordinates[1]][@start_coordinates[0] - 1] = ''
+  def adjust_board
+    @chess.board[8 - @chess.finish_coordinates[1]][@chess.finish_coordinates[0] - 1] = @chess.start_square
+    @chess.board[8 - @chess.start_coordinates[1]][@chess.start_coordinates[0] - 1] = ''
   end
 
   def who_plays_first
-    arr = [@player_one.data[:name], @player_two.data[:name]]
     # sleep 2
     puts "Computer will randomly select the first player..."
     # sleep 2
@@ -64,6 +63,7 @@ class Game
     # sleep 2
     puts 'Initiating start up'
     # sleep 4
+    arr = [@player_one.data[:name], @player_two.data[:name]]
     name = arr.sample
     if @player_one.data[:name] == name
       @player_one.data[:next_turn] = true
@@ -72,37 +72,6 @@ class Game
     end
     name.upcase
   end
-  
-  def obtain_start_square
-    puts 'Enter X coordinate:'
-    x = user_input
-    puts 'Enter Y coordinate:'
-    y = user_input
-    @start_coordinates << x
-    @start_coordinates << y
-    @board[8-y][x-1]
-  end
-
-  def obtain_finish_square
-    puts 'Enter X coordinate:'
-    x = user_input
-    puts 'Enter Y coordinate:'
-    y = user_input
-    @finish_coordinates << (x)
-    @finish_coordinates << (y)
-    @board[8-y][x-1]
-  end
-
-  def user_input
-    num = loop do
-      num = Integer(gets) rescue nil
-      break num if num && num < 9 && num > 0
-
-      puts "you didn't enter a valid number..."
-    end
-
-    return num 
-  end
 
   def checkmate?
   end
@@ -110,19 +79,8 @@ class Game
   def check?
   end
 
-  def print_board
-    # method to print TTY Table board
-  end
-
   def whos_turn
     @player_one.data[:next_turn] ? @player_one : @player_two
-  end
-
-  def reset_variables
-    @start_square = nil
-    @finish_square = nil
-    @start_coordinates = []
-    @finish_coordinates = []
   end
 
   def continue
@@ -131,3 +89,4 @@ class Game
     print "            \r"
   end
 end
+
