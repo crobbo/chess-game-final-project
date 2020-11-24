@@ -1,58 +1,48 @@
 require 'rspec/autorun'
-require_relative '../lib/game.rb'
-require_relative '../lib/player.rb'
+require_relative '../lib/game'
+require_relative '../lib/player'
+require_relative '../lib/knight'
 
 describe Knight do
-  let(:player_one) { Player.new(1) }
-  let(:player_two) { Player.new(2) }
-  let(:game) { Game.new(player_one, player_two) }
-  
-  context "When a player selects Knight to move & destination square to move it to" do 
 
-    it "returns false when destination square is already occupied by player's own piece" do
-      player_one.data[:next_turn] = true
-      game.board[2][2] = game.board[1][2] 
-      game.board[1][2] = ''
-      start_coordinates = [2, 8]
-      finish_coordinates = [3, 6]
-      start_square = game.board[0][1]
+  describe '#valid_move?' do
+    # this is the method I am trying to test
+    let(:player_one) { instance_double(Player(1)) }
+    let(:player_two) { instance_double(Player(2)) }
+    let(:board) { instance_double(Board) }
+    subject(:knight) { described_class.new(player_one) }
 
-      expect(start_square.valid_move?(start_coordinates, finish_coordinates, game.board, game.whos_turn)).to eq(false)
+    context 'when player moves knight to empty square' do
+     
+      before do
+        allow(board).to receive(:start_coordinates).with([1, 1])
+        allow(board).to receive(:finish_coordinates).with([3, 2])
+        board[7][0] = knight
+        board[5][1] = ''
+      end
+    
+      it 'returns true' do
+        expect(knight.valid_move?).to eq(true)
+      end
+      
     end
 
-    it "returns true when destiantion square is empty" do
-      player_one.data[:next_turn] = true
-      start_coordinates = [2, 8]
-      finish_coordinates = [3, 6]
-      start_square = game.board[0][1]
+    context 'when player moves piece to square occupied by their own piece' do
+      xit 'returns true' do
 
-      expect(start_square.valid_move?(start_coordinates, finish_coordinates, game.board, game.whos_turn)).to eq(true)
+      end
     end
 
-    it "returns true when destination square contains opponents piece" do
-      player_one.data[:next_turn] = true
-      game.board[2][2] = game.board[7][1]
-      game.board[7][1] = ''
-      start_coordinates = [2, 8]
-      finish_coordinates = [3, 6]
-      start_square = game.board[0][1]
+    context 'when player moves piece to square occupied by their own piece' do
+      xit 'returns false' do
 
-      expect(start_square.valid_move?(start_coordinates, finish_coordinates, game.board, game.whos_turn)).to eq(true)
+      end
     end
 
-    it "returns false if destination sqaure is not a valid move" do
-      player_one.data[:next_turn] = true
-      start_coordinates = [2, 8]
-      finish_coordinates = [2, 6]
-      start_square = game.board[0][1]
+    context 'when player moves piece to square which a knight move cannot make' do
+      xit 'returns false' do 
 
-      expect(start_square.valid_move?(start_coordinates, finish_coordinates, game.board, game.whos_turn)).to eq(false)
-    end
-
-    it "returns an array of possible moves" do 
-      # player_two.data[:next_turn] = true
-      start_square = game.board[7][1]
-      expect(start_square.possible_moves([2,1])).to eq([[1, 3], [1, -1], [3, 3], [3, -1], [0, 2], [0, 0], [4, 2], [4, 0]]) 
+      end
     end
 
   end
