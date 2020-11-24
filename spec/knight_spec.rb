@@ -6,19 +6,22 @@ require_relative '../lib/knight'
 describe Knight do
 
   describe '#valid_move?' do
+    
     # this is the method I am trying to test
+
     let(:player_one) { instance_double(Player(1)) }
     let(:player_two) { instance_double(Player(2)) }
-    let(:board) { instance_double(Board) }
+    let(:chess) { instance_double(Board) }
     subject(:knight) { described_class.new(player_one) }
+ 
 
     context 'when player moves knight to empty square' do
      
       before do
-        allow(board).to receive(:start_coordinates).with([1, 1])
-        allow(board).to receive(:finish_coordinates).with([3, 2])
-        board[7][0] = knight
-        board[5][1] = ''
+        allow(chess).to receive(:start_coordinates).and_return([1, 1])
+        allow(chess).to receive(:finish_coordinates).and_return([3, 2])
+        chess.board[7][0] = knight
+        chess.board[5][1] = ''
       end
     
       it 'returns true' do
