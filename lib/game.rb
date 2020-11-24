@@ -42,7 +42,7 @@ class Game
   def move_piece
     @chess.choose_coordinates
     return false unless @chess.start_square.which_player == whos_turn  # checks player is moving piece which belongs to them
-    return false unless @chess.start_square.valid_move?(@chess.start_coordinates, @chess.finish_coordinates, @chess.board, whos_turn)
+    return false unless @chess.start_square.valid_move?(@chess, whos_turn)
 
     whos_turn.add_to_graveyard(@chess, @chess.board)
     adjust_board

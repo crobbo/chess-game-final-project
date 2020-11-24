@@ -6,33 +6,39 @@ require_relative '../lib/knight'
 describe Knight do
 
   describe '#valid_move?' do
-    
+
     # this is the method I am trying to test
 
-    let(:player_one) { instance_double(Player(1)) }
-    let(:player_two) { instance_double(Player(2)) }
-    let(:chess) { instance_double(Board) }
+    let(:player_one) { instance_double(Player) }
     subject(:knight) { described_class.new(player_one) }
- 
+
 
     context 'when player moves knight to empty square' do
-     
+
+      let (:board) { instance_double(Board, start_coordinates: [1,1], finish_coordinates: [3, 2], board: [ ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', '']
+      ]) }
+
       before do
-        allow(chess).to receive(:start_coordinates).and_return([1, 1])
-        allow(chess).to receive(:finish_coordinates).and_return([3, 2])
-        chess.board[7][0] = knight
-        chess.board[5][1] = ''
+        board.board[7][0] = knight
       end
-    
+
       it 'returns true' do
-        expect(knight.valid_move?).to eq(true)
+        expect(knight.valid_move?(board, player_one)).to eq(true)
       end
       
     end
 
     context 'when player moves piece to square occupied by their own piece' do
-      xit 'returns true' do
 
+      xit 'returns true' do
+        
       end
     end
 
@@ -43,8 +49,23 @@ describe Knight do
     end
 
     context 'when player moves piece to square which a knight move cannot make' do
-      xit 'returns false' do 
 
+      let (:board) { instance_double(Board, start_coordinates: [1,1], finish_coordinates: [1, 2], board: [ ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', '']
+      ]) }
+
+      before do
+        board.board[7][0] = knight
+      end
+
+      it 'returns false' do
+        expect(knight.valid_move?(board, player_one)).to eq(false)
       end
     end
 
