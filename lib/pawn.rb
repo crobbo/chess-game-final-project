@@ -8,6 +8,12 @@ require 'pry'
 
 class Pawn < Piece
 
+  def initialize(player)
+    @which_player = super
+    @valid = super
+    @first_move = true
+  end
+
   def moves
     [
       # player1 moves
@@ -58,9 +64,10 @@ class Pawn < Piece
   end
 
   def possible_moves(start_coordinates, player)
-    # returns a nested array of coordinates of possible moves
-    coordinates = []
+    
+    # IMPORTANT: a possible move may not be a valid move. Valid moves method validates if it is a correct move.
 
+    coordinates = []
     if player.data[:number] == 2
       moves.each_with_index do |v, i|
         next if i == 0 || i == 1 || i == 2
@@ -72,17 +79,34 @@ class Pawn < Piece
     else
       moves.each_with_index do |v, i|
         next if i == 3 || i == 4 || i == 5
-      
+
         arr = [start_coordinates]
         arr << v
         coordinates << arr.transpose.map(&:sum)
       end
     end
-    coordinates
+    check_first_move(coordinates, start_coordinates, player)
+  end
+
+  def check_first_move(coordinates, start_coordinates, player)
+    if @first_move && player.data[:number] == 2
+      @first_move = false
+      coordinates << [start_coordinates, [0, 2]].transpose.map(&:sum)
+    elsif @first_move && player.data[:number] == 2
+      @first_move = false
+      coordinates << [start_coordinates, [0, -2]].transpose.map(&:sum)
+    else
+      coordinates
+    end
+  end
+
+  def first_move
+    @first_move = false
   end
 
   def unicode
     "\u265F"
   end
 end
+
 

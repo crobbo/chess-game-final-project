@@ -1,44 +1,68 @@
-# require 'rspec/autorun'
-# require_relative '../lib/game.rb'
-# require_relative '../lib/player.rb'
+require 'rspec/autorun'
+require_relative '../lib/game.rb'
+require_relative '../lib/player.rb'
 
-# describe Pawn do
+describe Pawn do
 
-#   let(:player_one) { Player.new(1) }
-#   let(:player_two) { Player.new(2) }
-#   let(:game) { Game.new(player_one, player_two) }
+  describe '#possible_moves' do
+    # possible moves may not be valid moves
+    
+    subject(:pawn) { described_class.new(player_two) }
+    let(:player_one) { instance_double(Player) }
+    let(:player_two) { instance_double(Player) }
 
-#   context "When a player selects a Pawn to move & destination square to move it to" do
-
-#     xit "returns false when destination square is already occupied by player's own piece" do
-#       player_one.data[:next_turn] = true
-#       game.board[4][3] = game.board[7][0]
-#       game.board[5][3] = game.board[6][0]
-#       game.board[7][0] = ''
-#       game.board[6][0] = ''
-#       start_coordinates = [4, 3]
-#       finish_coordinates = [4, 4]
-#       start_square = game.board[5][3]
-#       expect(start_square.valid_move?(start_coordinates, finish_coordinates, game.board, game.whos_turn)).to eq(false)
-
-#     end
-
-#     xit "returns true when destiantion square is empty" do
-#     end
-
-#     xit "returns true when destination square contains opponents piece" do
-#     end
-
-#     xit "returns false if destination sqaure is not a valid move" do
-#     end
-
-#     it "returns the possible moves for player 1" do
+    context "when Pawn is making it's first move" do
       
-#       start_square = game.board[6][4]
-#       p game.board[6][4]
-      
-#       expect(start_square.possible_moves([2, 3], game.whos_turn)).to eq([[2, 4], [1, 4], [3, 4]])
-#     end
+      let(:board) { instance_double(Board, start_coordinates: [4, 2], board: [ ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', '']
+      ]) }
 
-#   end
-# end
+      before do 
+       board.board[6][5] = pawn
+       allow(player_two).to receive(:data).and_return({ number: 2 })
+      end
+
+      it ' returns array of possible moves' do
+        expect(pawn.possible_moves(board.start_coordinates, player_two)).to contain_exactly([4,3], [4, 4], [3, 3], [5, 3])
+      end
+    end
+
+    context "when Pawn is making a move that is not it's first move" do
+      
+      let(:board) { instance_double(Board, start_coordinates: [4, 3], board: [ ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', '']
+      ]) }
+
+      before do
+        subject.instance_variable_set(:@first_move, false)
+        allow(player_two).to receive(:data).and_return({ number: 2 })
+      end
+      it 'returns array of possible moves but excludes 2 moves forward' do
+        expect(pawn.possible_moves(board.start_coordinates, player_two)).to contain_exactly([3, 4], [4, 4], [5, 4])
+      end
+    end
+
+    context "when a pawn is making it's first move" do
+
+      xit 'first_move returns true' do
+      end
+    end
+
+    context "when a pawn is making it's second move" do
+      xit 'first_move returns false' do
+      end
+    end
+  end
+end

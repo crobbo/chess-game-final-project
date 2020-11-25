@@ -25,6 +25,7 @@ describe Knight do
 
       before do
         board.board[7][0] = knight
+      
       end
 
       it 'returns true' do
