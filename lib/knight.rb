@@ -20,9 +20,9 @@ class Knight < Piece
     squares = possible_moves(chess.start_coordinates)
     if squares.include?(chess.finish_coordinates) && chess.board[8 - chess.finish_coordinates[1]][chess.finish_coordinates[0] - 1] == ''
       true
-    elsif squares.include?(chess.finish_coordinates) && chess.board[8 - chess.finish_coordinates[1]][finish_coordinates[0] - 1].which_player != player
+    elsif squares.include?(chess.finish_coordinates) && chess.board[8 - chess.finish_coordinates[1]][chess.finish_coordinates[0] - 1].which_player != player
       true
-    elsif squares.include?(chess.finish_coordinates) && chess.board[8 - chess.finish_coordinates[1]][finish_coordinates[0] - 1].which_player == player 
+    elsif squares.include?(chess.finish_coordinates) && chess.board[8 - chess.finish_coordinates[1]][chess.finish_coordinates[0] - 1].which_player == player 
       false
     else
       false
