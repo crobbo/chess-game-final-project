@@ -4,15 +4,12 @@ require_relative '../lib/player'
 require_relative '../lib/knight'
 
 describe Knight do
+  
+  subject(:knight) { described_class.new(player_one) }
+  let(:player_one) { instance_double(Player) }
+  let(:player_two) { instance_double(Player) }
 
   describe '#valid_move?' do
-
-    # this is the method I am trying to test
-
-    let(:player_one) { instance_double(Player) }
-    let(:player_two) { instance_double(Player) }
-    subject(:knight) { described_class.new(player_one) }
-
 
     context 'when player moves knight to empty square' do
 
@@ -105,5 +102,35 @@ describe Knight do
       end
     end
 
+  end
+
+
+  describe '#possible_moves' do
+    context 'when a knight has 8 valid moves' do
+
+      let(:board) { instance_double(Board, start_coordinates: [4, 4]) }
+
+      it 'returns an array of 8 valid moves' do
+        expect(knight.possible_moves(board.start_coordinates)).to contain_exactly([3, 2], [5, 2], [6, 3], [6, 5], [5, 6], [3, 6], [2, 5], [2, 3])
+      end
+    end
+
+    context 'when a knight is on the edge of the board' do
+      
+      let(:board) { instance_double(Board, start_coordinates: [1, 4]) }
+
+      it 'returns an array of valid moves' do
+        expect(knight.possible_moves(board.start_coordinates)).to include([2, 6], [3, 5], [3, 3], [2, 2])
+      end
+    end
+
+    context 'when a knight is in the corner of the board' do
+
+      let(:board) { instance_double(Board, start_coordinates: [1, 1]) }
+
+      it 'returns an array of possible moves' do
+        expect(knight.possible_moves(board.start_coordinates)).to include([3, 2], [2, 3])
+      end
+    end
   end
 end
