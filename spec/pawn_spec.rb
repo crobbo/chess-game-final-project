@@ -1,67 +1,71 @@
 require 'rspec/autorun'
 require_relative '../lib/game.rb'
 require_relative '../lib/player.rb'
+require_relative '../lib/pawn'
 
 describe Pawn do
 
   describe '#possible_moves' do
-    # possible moves may not be valid moves
+    # possible moves may not all be valid moves
+
+    context "Player 1 Pawn is making it's first move" do
+      xit 'returns array length of 2' do
+      end
+
+      xit 'returns nested array of diagonals and forwards moves' do
+      end
+
+      xit 'returns array containing 2 diagonal moves' do
+      end
+
+      xit 'returns array containing 2 forward moves' do
+      end
+    end 
+
+    context "Player 2 Pawn is making it's first move" do
+      xit 'returns array length of 2' do
+      end
+
+      xit 'returns nested array of diagonals and forwards moves' do
+      end
+
+      xit 'returns array containing 2 diagonal moves' do
+      end
+
+      xit 'returns array containing 2 forward moves' do
+      end 
     
-    subject(:pawn) { described_class.new(player_two) }
-    let(:player_one) { instance_double(Player) }
-    let(:player_two) { instance_double(Player) }
+  end
 
-    context "when Pawn is making it's first move" do
+  describe '#valid_moves?' do
+    context 'when Player 1 pawn is moving to an empty forward square on first go' do
+      xit 'returns true moving distance of 1' do
+      end
+
+      xit 'returns true when moving distance of 2' do
+      end
+
+      xit 'returns false when movin distance of 3' do
+      end
+    end
+
+    context 'when player 1 pawn is moving to an empty forward square on second move' do
+      xit 'returns true moving distance of 1' do
+      end
+
+      xit 'returns false when moving distance of 2' do
+      end
+
+      xit 'returns false when movin distance of 3' do
+      end
+    end
+
+    context 'when player 1 pawn is moving to an empty diagonal square' do
       
-      let(:board) { instance_double(Board, start_coordinates: [4, 2], board: [ ['', '', '', '', '', '', '', ''],
-        ['', '', '', '', '', '', '', ''],
-        ['', '', '', '', '', '', '', ''],
-        ['', '', '', '', '', '', '', ''],
-        ['', '', '', '', '', '', '', ''],
-        ['', '', '', '', '', '', '', ''],
-        ['', '', '', '', '', '', '', ''],
-        ['', '', '', '', '', '', '', '']
-      ]) }
-
-      before do 
-       board.board[6][5] = pawn
-       allow(player_two).to receive(:data).and_return({ number: 2 })
+      xit 'returns false when moving to left diagonal' do
       end
 
-      it ' returns array of possible moves' do
-        expect(pawn.possible_moves(board.start_coordinates, player_two)).to contain_exactly([4,3], [4, 4], [3, 3], [5, 3])
-      end
-    end
-
-    context "when Pawn is making a move that is not it's first move" do
-      
-      let(:board) { instance_double(Board, start_coordinates: [4, 3], board: [ ['', '', '', '', '', '', '', ''],
-        ['', '', '', '', '', '', '', ''],
-        ['', '', '', '', '', '', '', ''],
-        ['', '', '', '', '', '', '', ''],
-        ['', '', '', '', '', '', '', ''],
-        ['', '', '', '', '', '', '', ''],
-        ['', '', '', '', '', '', '', ''],
-        ['', '', '', '', '', '', '', '']
-      ]) }
-
-      before do
-        subject.instance_variable_set(:@first_move, false)
-        allow(player_two).to receive(:data).and_return({ number: 2 })
-      end
-      it 'returns array of possible moves but excludes 2 moves forward' do
-        expect(pawn.possible_moves(board.start_coordinates, player_two)).to contain_exactly([3, 4], [4, 4], [5, 4])
-      end
-    end
-
-    context "when a pawn is making it's first move" do
-
-      xit 'first_move returns true' do
-      end
-    end
-
-    context "when a pawn is making it's second move" do
-      xit 'first_move returns false' do
+      xit 'returns false when moving to right diagonal' do
       end
     end
   end
