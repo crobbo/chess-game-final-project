@@ -39,10 +39,10 @@ class Pawn < Piece
 
   def possible_moves(start_coordinates, player)
     # IMPORTANT: a possible move may not be a valid move. Valid moves method validates if it is a correct move.
-   player.data[:number] == 1 ? player_one_moves : player_two_moves
+   player.data[:number] == 1 ? player_one_moves(start_coordinates) : player_two_moves(start_coordinates)
   end
 
-  def player_one_moves
+  def player_one_moves(start_coordinates)
     moves = [[], []]
     route_one = [start_coordinates, self.moves[0]]
     moves[0] << route_one.transpose.map(&:sum)
@@ -55,12 +55,12 @@ class Pawn < Piece
 
     if first_move
       route_four = [start_coordinates, self.moves[2]]
-      moves[1] << route_two.transpose.map(&:sum)
+      moves[1] << route_four.transpose.map(&:sum)
     end
     moves
   end
 
-  def player_two_moves
+  def player_two_moves(start_coordinates)
     moves = [[], []]
     route_one = [start_coordinates, self.moves[4]]
     moves[0] << route_one.transpose.map(&:sum)
@@ -73,7 +73,7 @@ class Pawn < Piece
 
     if first_move
       route_four = [start_coordinates, self.moves[6]]
-      moves[1] << route_two.transpose.map(&:sum)
+      moves[1] << route_four.transpose.map(&:sum)
     end
     moves
   end
