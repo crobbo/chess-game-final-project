@@ -52,7 +52,7 @@ describe Pawn do
 
   end
 
-  describe '#possilbe_moves'do
+  describe '#possible_moves'do
     
     context "when it's player one's turn" do
       
@@ -84,36 +84,154 @@ describe Pawn do
   end
 
 
-  describe '#valid_moves?' do
-    context 'when Player 1 pawn is moving to an empty forward square on first go' do
-      xit 'returns true moving distance of 1' do
+  describe '#check_forward_move?' do
+    context 'when Player 1 pawn is moving one space forward on first go' do
+      subject(:pawn_move_one) { described_class.new(player_one) }
+      let(:player_rook) { instance_double(Rook, which_player: player_one)}
+      let(:opponent_rook) { instance_double(Rook, which_player: player_two)}
+      let(:chess) { instance_double(Board, board: [
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', '']
+      ], start_coordinates: [5, 7], finish_coordinates: [5, 6]) }
+      let(:possible_moves) { [[[4, 6], [6, 6]], [[5, 6], [5, 5]]] }
+
+      it 'returns true when square is empty' do
+        chess.board[2][4] = ''
+        expect(pawn_move_one.check_forward_moves(chess, player_one, possible_moves)).to eq(true)
       end
 
-      xit 'returns true when moving distance of 2' do
+      it 'returns false when square contains players piece' do
+        chess.board[2][4] = player_rook
+        expect(pawn_move_one.check_forward_moves(chess, player_one, possible_moves)).to eq(false)
       end
 
-      xit 'returns false when movin distance of 3' do
+      it 'returns false when square contains opponents piece' do
+        chess.board[2][4] = opponent_rook
+        expect(pawn_move_one.check_forward_moves(chess, player_one, possible_moves)).to eq(false)
+      end
+
+    end
+
+    context 'when player 1 pawn is moving two squares forward on first go' do
+      subject(:pawn_move_two) { described_class.new(player_one) }
+      let(:player_rook) { instance_double(Rook, which_player: player_one)}
+      let(:opponent_rook) { instance_double(Rook, which_player: player_two)}
+      let(:chess) { instance_double(Board, board: [
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', '']
+      ], start_coordinates: [5, 7], finish_coordinates: [5, 5]) }
+      let(:possible_moves) { [[[4, 6], [6, 6]], [[5, 6], [5, 5]]] }
+
+
+      it 'returns true when sqaure is empty' do
+        chess.board[3][4] = ''
+        expect(pawn_move_two.check_forward_moves(chess, player_one, possible_moves)).to eq(true)
+      end
+
+      it 'returns false when square contains players piece' do
+        chess.board[3][4] = player_rook
+        expect(pawn_move_two.check_forward_moves(chess, player_one, possible_moves)).to eq(false)
+      end
+
+      it 'returns false when square contains opponents piece' do
+        chess.board[3][4] = player_rook
+        expect(pawn_move_two.check_forward_moves(chess, player_one, possible_moves)).to eq(false)
       end
     end
 
-    context 'when player 1 pawn is moving to an empty forward square on second move' do
-      xit 'returns true moving distance of 1' do
+    context 'when Player 1 pawn is making a forward move (1 square) that is not its first move' do
+      subject(:pawn_move_two) { described_class.new(player_one) }
+      let(:player_rook) { instance_double(Rook, which_player: player_one)}
+      let(:opponent_rook) { instance_double(Rook, which_player: player_two)}
+      let(:chess) { instance_double(Board, board: [
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', '']
+      ], start_coordinates: [5, 4], finish_coordinates: [5, 3]) }
+      let(:possible_moves) { [[[4, 3], [6, 3]], [[5, 3]]] }
+
+      before do
+        pawn_move_two.change_first_move
+      end 
+
+      it 'returns true when square is empty' do
+        chess.board[5][4] = ''
+        expect(pawn_move_two.check_forward_moves(chess, player_one, possible_moves)).to eq(true)
       end
 
-      xit 'returns false when moving distance of 2' do
+      it 'returns false when square contains players piece' do
+        chess.board[5][4] = player_rook
+        expect(pawn_move_two.check_forward_moves(chess, player_one, possible_moves)).to eq(false)
       end
 
-      xit 'returns false when movin distance of 3' do
+      it 'returns false when square contains opponents piece' do
+        chess.board[5][4] = opponent_rook
+        expect(pawn_move_two.check_forward_moves(chess, player_one, possible_moves)).to eq(false)
       end
+
     end
 
-    context 'when player 1 pawn is moving to an empty diagonal square' do
-      
-      xit 'returns false when moving to left diagonal' do
+
+    context 'when Player 1 pawn is making a forward move (2 squares) that is not its first move' do
+      subject(:pawn_move_two) { described_class.new(player_one) }
+      let(:player_rook) { instance_double(Rook, which_player: player_one)}
+      let(:opponent_rook) { instance_double(Rook, which_player: player_two)}
+      let(:chess) { instance_double(Board, board: [
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', '']
+      ], start_coordinates: [5, 4], finish_coordinates: [5, 2]) }
+      let(:possible_moves) { [[[4, 3], [6, 3]], [[5, 3]]] }
+
+      before do
+        pawn_move_two.change_first_move
+      end 
+
+      it 'returns false when square is empty' do
+        chess.board[6][4] = ''
+        expect(pawn_move_two.check_forward_moves(chess, player_one, possible_moves)).to eq(false)
       end
 
-      xit 'returns false when moving to right diagonal' do
+      it 'returns false when square contains players piece' do
+        chess.board[6][4] = player_rook
+        expect(pawn_move_two.check_forward_moves(chess, player_one, possible_moves)).to eq(false)
       end
+
+      it 'returns false when square contains opponents piece' do
+        chess.board[6][4] = opponent_rook
+        expect(pawn_move_two.check_forward_moves(chess, player_one, possible_moves)).to eq(false)
+      end
+
     end
+
+
+
+  
   end
+
+  describe '#check_diagonal_move' do
+  end
+
 end

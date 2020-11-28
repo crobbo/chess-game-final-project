@@ -30,11 +30,38 @@ class Pawn < Piece
   end
 
   def valid_move?(chess, player)
+    squares = possible_moves(chess.start_coordinates, player)
+    if check_forward_moves(chess, player, squares)
+      true
+    elsif check_diagonal_moves(chess, player)
+      true
+    else
+      false
+    end
+  end
 
-    squares = possible_moves(chess.board, player)
-
-    
-
+  def check_diagonal_moves(chess, player, squares)
+    if squares[0].inlcude?(chess.finish_coordinates) && chess.board[8 - chess.finish_coordinates[1]][chess.finish_coordinates[0] - 1] == ''
+      false
+    elsif squares[0].include?(chess.finish_coordinates) && chess.board[8 - chess.finish_coordinates[1]][chess.finish_coordinates[0] - 1].which_player == player
+      false
+    elsif squares[0].include?(chess.finish_coordinates) && chess.board[8 - chess.finish_coordinates[1]][chess.finish_coordinates[0] - 1].which_player != player
+      true
+    else
+      false
+    end
+  end
+  
+  def check_forward_moves(chess, player, squares)
+    if squares[1].include?(chess.finish_coordinates) && chess.board[8 - chess.finish_coordinates[1]][chess.finish_coordinates[0] - 1] == ''
+      true
+    elsif squares[1].include?(chess.finish_coordinates) && chess.board[8 - chess.finish_coordinates[1]][chess.finish_coordinates[0] - 1].which_player == player
+      false
+    elsif squares[1].include?(chess.finish_coordinates) && chess.board[8 - chess.finish_coordinates[1]][chess.finish_coordinates[0] - 1].which_player != player
+      false
+    else
+      false
+    end
   end
 
   def possible_moves(start_coordinates, player)
@@ -53,7 +80,7 @@ class Pawn < Piece
     route_three = [start_coordinates, self.moves[1]]
     moves[1] << route_three.transpose.map(&:sum)
 
-    if first_move
+    if @first_move
       route_four = [start_coordinates, self.moves[2]]
       moves[1] << route_four.transpose.map(&:sum)
     end
@@ -71,15 +98,15 @@ class Pawn < Piece
     route_three = [start_coordinates, self.moves[5]]
     moves[1] << route_three.transpose.map(&:sum)
 
-    if first_move
+    if @first_move
       route_four = [start_coordinates, self.moves[6]]
       moves[1] << route_four.transpose.map(&:sum)
     end
     moves
   end
 
-  def first_move
-    @first_move
+  def change_first_move
+    @first_move = false
   end
 
   def unicode
