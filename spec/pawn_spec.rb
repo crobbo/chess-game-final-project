@@ -22,12 +22,30 @@ describe Pawn do
       end
 
       it 'returns array containing 2 diagonal moves' do
-        expect(pawn_one.player_one_moves(start_coordinates)[0]). to contain_exactly([5, 6], [3, 6])
+        expect(pawn_one.player_one_moves(start_coordinates)[0]).to contain_exactly([5, 6], [3, 6])
       end
 
       it 'returns array containing 2 forward moves' do
-        expect(pawn_one.player_one_moves(start_coordinates)[1]). to contain_exactly([4, 6], [4, 5])
+        expect(pawn_one.player_one_moves(start_coordinates)[1]).to contain_exactly([4, 6], [4, 5])
       end
+    end
+
+    context "player 1 Pawn is not making it's first move" do
+      subject(:pawn_one) { described_class.new(player_one) }
+      let(:start_coordinates) { [4, 4] }
+
+      before do
+        pawn_one.change_first_move
+      end
+
+      it 'returns nested array containing two diagonal moves' do
+        expect(pawn_one.player_one_moves(start_coordinates)[0]).to contain_exactly([3, 3], [5, 3])
+      end
+
+      it 'returns nested array containing one forward move' do
+        expect(pawn_one.player_one_moves(start_coordinates)[1].length).to eq(1)
+      end
+
     end
   end 
 
@@ -41,13 +59,31 @@ describe Pawn do
         expect(pawn_two.player_two_moves(start_coordinates).length).to eq(2)
       end
 
-      it 'returns array containing 2 diagonal moves' do
+      it 'returns nested array containing 2 diagonal moves' do
         expect(pawn_two.player_two_moves(start_coordinates)[0]). to contain_exactly([6, 3], [4, 3])
       end
 
-      it 'returns array containing 2 forward moves' do
+      it 'returns nested array containing 2 forward moves' do
         expect(pawn_two.player_two_moves(start_coordinates)[1]). to contain_exactly([5, 3], [5, 4])
       end 
+    end
+
+    context "player 2 Pawn is not making it's first move" do
+      subject(:pawn_two) { described_class.new(player_two) }
+      let(:start_coordinates) { [4, 4] }
+
+      before do
+        pawn_two.change_first_move
+      end
+
+      it 'returns nested array containing two diagonal moves' do
+        expect(pawn_two.player_two_moves(start_coordinates)[0]).to contain_exactly([3, 5], [5, 5])
+      end
+
+      it 'returns nested array containing one forward move' do
+        expect(pawn_two.player_two_moves(start_coordinates)[1].length).to eq(1)
+      end
+
     end
 
   end
@@ -224,14 +260,56 @@ describe Pawn do
         expect(pawn_move_two.check_forward_moves(chess, player_one, possible_moves)).to eq(false)
       end
 
-    end
-
-
-
-  
+    end  
   end
 
   describe '#check_diagonal_move' do
-  end
 
+    context 'Player 1 pawn is moving to empty diagonal' do
+      subject(:pawn_diag) { described_class.new(player_one) }
+      let(:chess) { instance_double(Board, board: [
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', '']
+      ], start_coordinates: [2, 4], finish_coordinates: [1, 3]) }
+      let(:possible_moves) { [[[1, 3], [3, 3]], [[2, 3]]] }
+
+      it 'returns false' do
+        chess.board[5][0] = ''
+        expect(pawn_diag.check_diagonal_moves(chess, player_one, possible_moves)).to eq(false)
+      end
+    end
+
+    context 'player 1 is moving to occupied diagonal' do
+      subject(:pawn_diag) { described_class.new(player_one) }
+      let(:player_rook) { instance_double(Rook, which_player: player_one)}
+      let(:opponent_rook) { instance_double(Rook, which_player: player_two)}
+      let(:chess) { instance_double(Board, board: [
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', '']
+      ], start_coordinates: [2, 4], finish_coordinates: [1, 3]) }
+      let(:possible_moves) { [[[1, 3], [3, 3]], [[2, 3]]] }
+
+      it 'returns false if occupied by players own piece' do
+        chess.board[5][0] = player_rook
+        expect(pawn_diag.check_diagonal_moves(chess, player_one, possible_moves)).to eq(false)
+      end
+
+      it 'returns true if occupied by opponents place' do
+        chess.board[5][0] = opponent_rook
+        expect(pawn_diag.check_diagonal_moves(chess, player_one, possible_moves)).to eq(true)
+      end
+    end
+  end
 end

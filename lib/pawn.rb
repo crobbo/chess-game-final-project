@@ -41,7 +41,7 @@ class Pawn < Piece
   end
 
   def check_diagonal_moves(chess, player, squares)
-    if squares[0].inlcude?(chess.finish_coordinates) && chess.board[8 - chess.finish_coordinates[1]][chess.finish_coordinates[0] - 1] == ''
+    if squares[0].include?(chess.finish_coordinates) && chess.board[8 - chess.finish_coordinates[1]][chess.finish_coordinates[0] - 1] == ''
       false
     elsif squares[0].include?(chess.finish_coordinates) && chess.board[8 - chess.finish_coordinates[1]][chess.finish_coordinates[0] - 1].which_player == player
       false
