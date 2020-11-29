@@ -17,25 +17,21 @@ class King < Piece
     ]
   end
 
-  def valid_move?(start_coordinates, finish_coordinates, board, player)
-    sqaures = possible_moves(start_coordinates)
-    # If finish square is empty, returns true or false whether piece can move there
-    if board[8 - finish_coordinates[1]][finish_coordinates[0] - 1] == ''
-      if sqaures.include?(finish_coordinates)
+  def valid_move?(chess, player)
+    sqaures = possible_moves(chess.start_coordinates)
+    if chess.board[8 - chess.finish_coordinates[1]][chess.finish_coordinates[0] - 1] == ''
+      if sqaures.include?(chess.finish_coordinates)
         true
       end
-    # # If finish square contains opponents piece return true
-    elsif board[8 - finish_coordinates[1]][finish_coordinates[0] - 1].which_player != player
-      if sqaures.include?(finish_coordinates)
+    elsif chess.board[8 - chess.finish_coordinates[1]][chess.finish_coordinates[0] - 1].which_player != player
+      if sqaures.include?(chess.finish_coordinates)
         true
       end
-    # If finish square contains own players piece then return false. 
-    elsif board[8 - finish_coordinates[1]][finish_coordinates[0] - 1].which_player == player
-      binding.pry
+    elsif chess.board[8 - chess.finish_coordinates[1]][chess.finish_coordinates[0] - 1].which_player == player
       false
     end
   end
-  # returns a nested array of coordinates which are possible moves
+
   def possible_moves(start_coordinates)
     coordinates = []
     moves.each do |i|
@@ -51,4 +47,3 @@ class King < Piece
   end
 
 end
-
