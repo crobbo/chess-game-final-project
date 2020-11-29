@@ -16,7 +16,7 @@ class Game
   def play
     introduction
     until checkmate?
-      binding.pry
+      # binding.pry
       valid_move
       @chess.reset_variables
     end
@@ -33,7 +33,7 @@ class Game
 
   def valid_move
     unless move_piece
-      binding.pry
+      # binding.pry
       @error.invalid_move
       move_piece
     end
@@ -41,16 +41,28 @@ class Game
 
   def move_piece
     @chess.choose_coordinates
+    binding.pry
+    # @chess.board[8 - @chess.start_coordinates[1]][@chess.start_coordinates[0] - 1] == '' 
+    return false if @chess.board[8 - @chess.start_coordinates[1]][@chess.start_coordinates[0] - 1] == ''
     return false unless @chess.start_square.which_player == whos_turn  # checks player is moving piece which belongs to them
     return false unless @chess.start_square.valid_move?(@chess, whos_turn)
-
+    
     whos_turn.add_to_graveyard(@chess, @chess.board)
+    pawn_fist_move?
     adjust_board
   end
 
   def adjust_board
     @chess.board[8 - @chess.finish_coordinates[1]][@chess.finish_coordinates[0] - 1] = @chess.start_square
     @chess.board[8 - @chess.start_coordinates[1]][@chess.start_coordinates[0] - 1] = ''
+  end
+
+  def pawn_fist_move?
+    if @chess.start_square.type == 'Pawn' && @chess.start_square.first_move == true
+      @chess.start_square.change_first_move
+    else
+      nil
+    end
   end
 
   def who_plays_first
@@ -89,4 +101,3 @@ class Game
     print "            \r"
   end
 end
-

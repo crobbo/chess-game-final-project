@@ -8,10 +8,13 @@ require 'pry'
 
 class Pawn < Piece
 
+  attr_reader :type, :first_move
+
   def initialize(player)
     @which_player = super
     @valid = super
     @first_move = true
+    @type = 'Pawn'
   end
 
   def moves
@@ -31,9 +34,10 @@ class Pawn < Piece
 
   def valid_move?(chess, player)
     squares = possible_moves(chess.start_coordinates, player)
+    binding.pry
     if check_forward_moves(chess, player, squares)
       true
-    elsif check_diagonal_moves(chess, player)
+    elsif check_diagonal_moves(chess, player, squares)
       true
     else
       false
@@ -41,6 +45,7 @@ class Pawn < Piece
   end
 
   def check_diagonal_moves(chess, player, squares)
+    binding.pry
     if squares[0].include?(chess.finish_coordinates) && chess.board[8 - chess.finish_coordinates[1]][chess.finish_coordinates[0] - 1] == ''
       false
     elsif squares[0].include?(chess.finish_coordinates) && chess.board[8 - chess.finish_coordinates[1]][chess.finish_coordinates[0] - 1].which_player == player
