@@ -13,20 +13,41 @@ class Rook < Piece
   end
 
   def valid_move?(chess, player)
-    start_coordinates = chess.start_coordinates
-    finish_coordinates = chess.finish_coordinates
-    
-    squares = possible_moves(start_coordinates)
-  
-    if squares.include?(finish_coordinates) && space_between? 
+    squares = possible_moves(chess.start_coordinates)
+    if squares.include?(finish_coordinates) && space_between?(chess)
+      true
+    else
+      false
     end
-
-
+  end
+  
+  def space_between_column?(chess)
+    row = transposed_column(chess)
+    start = row[chess.start_square]  
+    finish = row[chess.finsih_square]
+    result  = row[start..finish].each do |x|
+      return false if x != ''
+      break if x != ''
+    end
+    result == false ? false : true
   end
 
-  def space_between?(start_coordinates, finish_coordinates)
+  def transpose_column(chess)
+    transposed_board = chess.board.transpose 
+    transposed_board[8 - chess.start_coordinates[1]]
   end
 
+  def space_between_row?(chess)
+    find_row = chess.board[8 - chess.start_coordinates[1]]
+    start = chess.start_coordinates[0]
+    finish = chess.finish_coordinates[0] - 2
+    find_path = find_row[start..finish]
+    result = find_path.each do |x|
+      return false if x != ''
+      break if x != ''
+    end
+    result == false ? false : true
+  end
 
   def possible_moves(start_coordinates) 
     moves = []
