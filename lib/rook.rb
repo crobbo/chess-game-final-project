@@ -13,19 +13,31 @@ class Rook < Piece
   end
 
   def valid_move?(chess, player)
+    return false unless same_axis?(chess.start_coordinates, chess.finish_coordinates)
+
     squares = possible_moves(chess.start_coordinates)
-    if squares.include?(finish_coordinates) && space_between?(chess)
+    # if squares.include?(finish_coordinates) && space_between?(chess)
+    #   true
+    # else
+    #   false
+    # end
+  end
+
+  def same_axis?(start_coordinates, finish_coordinates)
+    if start_coordinates[0] == finish_coordinates[0]
+      true
+    elsif start_coordinates[1] == finish_coordinates[1]
       true
     else
       false
     end
   end
-  
+
   def space_between_column?(chess)
-    row = transposed_column(chess)
-    start = row[chess.start_square]  
-    finish = row[chess.finsih_square]
-    result  = row[start..finish].each do |x|
+    row = transpose_column(chess)
+    start = row.index(chess.start_square) + 1
+    finish = row.index(chess.finish_square) - 1
+    result = row[start..finish].each do |x|
       return false if x != ''
       break if x != ''
     end

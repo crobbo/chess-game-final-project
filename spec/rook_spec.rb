@@ -11,7 +11,47 @@ describe Rook do
   describe '#valid_move?' do
   end
 
+  describe '#same_axis??' do
+
+    subject(:rook_axis) { described_class.new(player_one) }
+
+    context 'when rook is selected to move to a target sqaure' do
+      it 'returns true if start_sqaure and finish_square are on the same x-axis' do
+        start_coordinates = [2, 3]
+        finish_coordinates = [2, 8]
+        expect(rook_axis.same_axis?(start_coordinates, finish_coordinates)).to eq(true)
+      end
+
+      it 'returns true if start_sqaure and finish_square are on the same y-axis' do
+        start_coordinates = [4, 8]
+        finish_coordinates = [2, 8]
+        expect(rook_axis.same_axis?(start_coordinates, finish_coordinates)).to eq(true)
+      end
+
+      it 'returns false if start_sqaure and finish_square are on NOT the same x-axis' do
+        start_coordinates = [2, 3]
+        finish_coordinates = [1, 6]
+        expect(rook_axis.same_axis?(start_coordinates, finish_coordinates)).to eq(false)
+      end
+    end
+  end
+
   describe '#possible_moves' do
+    subject(:rook_moves) { described_class.new(player_one) }
+
+    context 'when player wants to move the rook' do
+
+      before do
+        allow(rook_moves).to receive(:find_row_squares).and_return([[1, 3], [2, 3], [3, 3]])
+        allow(rook_moves).to receive(:find_column_squares).and_return([[4, 1], [4, 2]])
+      end
+
+      it 'returns a nested array of possible moves' do
+        start_coordinates = [4, 3]
+        expect(rook_moves.possible_moves(start_coordinates)).to eq([[[1, 3], [2, 3], [3, 3]], [[4, 1], [4, 2]]])
+      end
+    end
+
   end
 
   describe '#find_row_squares' do
@@ -103,13 +143,13 @@ describe Rook do
   end
 
   describe '#space_between_row' do
-    subject(:rook_path) { described_class.new(player_one) }
+    subject(:rook_row) { described_class.new(player_one) }
   
     let(:chess) { instance_double(Board, board: [
       ['', '', '', '', '', '', '', ''],
       ['', '', '', '', '', '', '', ''],
       ['', '', '', '', '', '', '', ''],
-      ['', '', '', '', '', '', '', ''],
+      ['', 'Rook', '', '', '', '', 'Target', ''],
       ['', '', '', '', '', '', '', ''],
       ['', '', '', '', '', '', '', ''],
       ['', '', '', '', '', '', '', ''],
@@ -118,9 +158,9 @@ describe Rook do
 
     let(:pawn) { instance_double(Pawn) }
     
-    context 'when space between rook and target piece is is empty' do
+    context 'when space between rook and target piece is empty' do
       it 'returns true' do
-        expect(rook_path.space_between_row?(chess)).to eq(true)
+        expect(rook_row.space_between_row?(chess)).to eq(true)
       end
     end
 
@@ -131,7 +171,7 @@ describe Rook do
       end
 
       it 'returns false' do
-        expect(rook_path.space_between_row?(chess)).to eq(false)
+        expect(rook_row.space_between_row?(chess)).to eq(false)
       end
     end
   end
@@ -157,25 +197,38 @@ describe Rook do
   end
 
   describe '#space_between_column' do
-    subject(:rook_path) { described_class.new(player_one) }
+    subject(:rook_column) { described_class.new(player_one) }
   
     let(:chess) { instance_double(Board, board: [
-      ['', '', '', '', '', '', '', ''],
-      ['', '', '', '', '', '', '', ''],
-      ['', '', '', '', '', '', '', ''],
-      ['', '', '', '', '', '', '', ''],
-      ['', '', '', '', '', '', '', ''],
-      ['', '', '', '', '', '', '', ''],
-      ['', '', '', '', '', '', '', ''],
-      ['', '', '', '', '', '', '', '']
-    ], start_coordinates: [2, 7], finish_coordinates: [2, 1]) }
+      ['1', '3', '2', '', '', '', '', ''],
+      ['1', 'Rook', '2', '', '', '', '', ''],
+      ['1', '', '2', '', '', '', '', ''],
+      ['1', '', '2', '', '', '', '', ''],
+      ['1', '', '2', '', '', '', '', ''],
+      ['1', '', '2', '', '', '', '', ''],
+      ['1', 'Pawn', '2', '', '', '', '', ''],
+      ['1', '3', '2', '', '', '', '', '']
+    ], start_coordinates: [2, 7], finish_coordinates: [2, 2], start_square: 'Rook', finish_square: 'Pawn') }
 
     let(:pawn) { instance_double(Pawn) }
-    
-    context 'when #space_between_row is called' do
-      xit 'returns an array moves' do
+
+    context 'when there is space between rook and target piece' do
+
+      it 'return true' do
+        expect(rook_column.space_between_column?(chess)).to eq(true)
       end
     end
+
+    context 'when there is a piece between rook and target piece' do
+      before do 
+        chess.board[3][1] = pawn
+      end
+
+      it 'return false' do
+        expect(rook_column.space_between_column?(chess)).to eq(false)
+      end
+    end
+
   end
 end
 
