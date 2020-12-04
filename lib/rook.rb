@@ -16,7 +16,7 @@ class Rook < Piece
     return false unless same_axis?(chess.start_coordinates, chess.finish_coordinates)
 
     squares = possible_moves(chess.start_coordinates)
-    if squares.include?(finish_coordinates) && (space_between_column?(chess) || space_between_row?) 
+    if (squares[0].include?(chess.finish_coordinates) || squares[1].include?(chess.finish_coordinates)) && (space_between_column?(chess) || space_between_row?(chess))
       if chess.finish_square == ''
         true
       elsif chess.finish_square.which_player != player
@@ -45,8 +45,11 @@ class Rook < Piece
     return false unless chess.start_coordinates[0] == chess.finish_coordinates[0]
 
     row = transpose_column(chess)
+    row.index(chess.start_square) < row.index(chess.finish_square) ? row : row.reverse
+    binding.pry ## add tests for this 
     start = row.index(chess.start_square) + 1
     finish = row.index(chess.finish_square) - 1
+    binding.pry
     result = row[start..finish].each do |x|
       return false if x != ''
       break if x != ''
@@ -56,7 +59,7 @@ class Rook < Piece
 
   def transpose_column(chess)
     transposed_board = chess.board.transpose 
-    transposed_board[8 - chess.start_coordinates[1]]
+    transposed_board[chess.start_coordinates[0]- 1]
   end
 
   def space_between_row?(chess)

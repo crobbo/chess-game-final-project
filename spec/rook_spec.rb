@@ -12,7 +12,7 @@ describe Rook do
     subject(:rook_valid) { described_class.new(player_one) }
 
     context 'when rook is moving to square not on the same axis' do
-      
+
       let(:chess) { instance_double(Board, board: [
         ['', '', '', '', '', '', '', ''],
         ['', '', '', '', '', '', '', ''],
@@ -33,13 +33,93 @@ describe Rook do
       end
     end
 
-    context 'when rook is moving to an empty square' do
-      xit 'returns true' do
+    context 'when rook is moving to an empty square in the same column' do
+      let(:chess) { instance_double(Board, board: [
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', '']
+      ], start_coordinates: [4, 4], finish_coordinates: [4, 7], start_square: rook_valid, finish_square: '') }
+
+      before do 
+        chess.board[4][3] = rook_valid
+      end
+
+      it 'returns true' do
+        expect(rook_valid.valid_move?(chess, player_one)).to eq(true)
       end
     end
 
-    context "when rook is moving to a square occupied by player's own piece" do
+    context 'when rook is moving to an empty square on the same row' do
+      let(:chess) { instance_double(Board, board: [
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', '']
+      ], start_coordinates: [4, 4], finish_coordinates: [7, 4], start_square: rook_valid, finish_square: '') }
+
+      before do 
+        chess.board[4][3] = rook_valid
+      end
+
+      it 'returns true' do
+        expect(rook_valid.valid_move?(chess, player_one)).to eq(true)
+      end
+    end
+
+    context "when rook is moving to a square occupied by player's own piece on the same row" do
+      let(:chess) { instance_double(Board, board: [
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', '']
+      ], start_coordinates: [4, 4], finish_coordinates: [7, 4], start_square: rook_valid, finish_square: pawn) }
+      
+      let(:pawn) { instance_double(Pawn, which_player: player_one)}
+
+      before do 
+        chess.board[4][3] = rook_valid
+        chess.board[4][6] = pawn
+      end
+
+      it 'returns false' do
+        expect(rook_valid.valid_move?(chess, player_one)).to eq(false)
+      end
+    end
+
+    context "when rook is moving to a square occupied by player's own piece in the same column" do
+      let(:chess) { instance_double(Board, board: [
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', '']
+      ], start_coordinates: [4, 8], finish_coordinates: [4, 4], start_square: pawn, finish_square: rook_valid) }
+      
+      let(:pawn) { instance_double(Pawn, which_player: player_one)}
+
+      before do 
+        chess.board[4][3] = pawn
+        chess.board[0][3] = rook_valid
+      end
+
       xit 'returns false' do
+        expect(rook_valid.valid_move?(chess, player_one)).to eq(false)
       end
     end
 
@@ -47,9 +127,6 @@ describe Rook do
       xit 'returns true' do
       end
     end
-
-
-
 
   end
 
@@ -250,7 +327,7 @@ describe Rook do
       ['1', '', '2', '', '', '', '', ''],
       ['1', 'Pawn', '2', '', '', '', '', ''],
       ['1', '3', '2', '', '', '', '', '']
-    ], start_coordinates: [2, 7], finish_coordinates: [2, 2], start_square: 'Rook', finish_square: 'Pawn') }
+    ], start_coordinates: [2, 2], finish_coordinates: [2, 7], start_square: 'Rook', finish_square: 'Pawn') }
 
     let(:pawn) { instance_double(Pawn) }
 
@@ -266,7 +343,7 @@ describe Rook do
         chess.board[3][1] = pawn
       end
 
-      it 'return false' do
+      xit 'return false' do
         expect(rook_column.space_between_column?(chess)).to eq(false)
       end
     end
