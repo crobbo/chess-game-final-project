@@ -16,11 +16,19 @@ class Rook < Piece
     return false unless same_axis?(chess.start_coordinates, chess.finish_coordinates)
 
     squares = possible_moves(chess.start_coordinates)
-    # if squares.include?(finish_coordinates) && space_between?(chess)
-    #   true
-    # else
-    #   false
-    # end
+    if squares.include?(finish_coordinates) && (space_between_column?(chess) || space_between_row?) 
+      if chess.finish_square == ''
+        true
+      elsif chess.finish_square.which_player != player
+        true
+      elsif chess.finish_square.which_player == player
+        false
+      else
+        false
+      end
+    else
+      false
+    end
   end
 
   def same_axis?(start_coordinates, finish_coordinates)
@@ -34,6 +42,8 @@ class Rook < Piece
   end
 
   def space_between_column?(chess)
+    return false unless chess.start_coordinates[0] == chess.finish_coordinates[0]
+
     row = transpose_column(chess)
     start = row.index(chess.start_square) + 1
     finish = row.index(chess.finish_square) - 1
@@ -50,6 +60,8 @@ class Rook < Piece
   end
 
   def space_between_row?(chess)
+    return false unless chess.start_coordinates[1] == chess.finish_coordinates[1]
+
     find_row = chess.board[8 - chess.start_coordinates[1]]
     start = chess.start_coordinates[0]
     finish = chess.finish_coordinates[0] - 2

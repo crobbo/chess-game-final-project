@@ -9,6 +9,48 @@ describe Rook do
   let(:player_two) { instance_double(Player)}
 
   describe '#valid_move?' do
+    subject(:rook_valid) { described_class.new(player_one) }
+
+    context 'when rook is moving to square not on the same axis' do
+      
+      let(:chess) { instance_double(Board, board: [
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', '']
+      ], start_coordinates: [1, 7], finish_coordinates: [2, 5]) }
+
+      before do
+        allow(rook_valid).to receive(:same_axis?).and_return(false)
+      end
+
+      it 'returns false' do
+        expect(rook_valid.valid_move?(chess, player_one)).to eq(false)
+      end
+    end
+
+    context 'when rook is moving to an empty square' do
+      xit 'returns true' do
+      end
+    end
+
+    context "when rook is moving to a square occupied by player's own piece" do
+      xit 'returns false' do
+      end
+    end
+
+    context "when rook is moving to a square occupied by opponent's piece" do
+      xit 'returns true' do
+      end
+    end
+
+
+
+
   end
 
   describe '#same_axis??' do
