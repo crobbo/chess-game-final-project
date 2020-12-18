@@ -109,22 +109,41 @@ describe Rook do
         ['', '', '', '', '', '', '', ''],
         ['', '', '', '', '', '', '', ''],
         ['', '', '', '', '', '', '', '']
-      ], start_coordinates: [4, 8], finish_coordinates: [4, 4], start_square: pawn, finish_square: rook_valid) }
+      ], start_coordinates: [4, 4], finish_coordinates: [4, 8], start_square: rook_valid, finish_square: pawn) }
       
       let(:pawn) { instance_double(Pawn, which_player: player_one)}
 
       before do 
-        chess.board[4][3] = pawn
-        chess.board[0][3] = rook_valid
+        chess.board[4][3] = rook_valid
+        chess.board[0][3] = pawn
       end
 
-      xit 'returns false' do
+      it 'returns false' do
         expect(rook_valid.valid_move?(chess, player_one)).to eq(false)
       end
     end
 
     context "when rook is moving to a square occupied by opponent's piece" do
-      xit 'returns true' do
+      let(:chess) { instance_double(Board, board: [
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', '']
+      ], start_coordinates: [4, 4], finish_coordinates: [4, 8], start_square: rook_valid, finish_square: pawn) }
+      
+      let(:pawn) { instance_double(Pawn, which_player: player_two)}
+
+      before do 
+        chess.board[4][3] = rook_valid
+        chess.board[0][3] = pawn
+      end
+      
+      it 'returns true' do
+        expect(rook_valid.valid_move?(chess, player_one)).to eq(true)
       end
     end
 
@@ -308,7 +327,7 @@ describe Rook do
       ['', '7', '', '', '', '', '', '']
     ], start_coordinates: [2, 7]) }
     
-    context 'when a board is a transposed' do
+    context 'when the board is a transposed' do
       it 'returns column as row' do
         expect(rook_transpose.transpose_column(chess)).to eq(['0', '1', '2', '3', '4', '5', '6', '7'])
       end
@@ -317,7 +336,10 @@ describe Rook do
 
   describe '#space_between_column' do
     subject(:rook_column) { described_class.new(player_one) }
-  
+    let(:pawn) { instance_double(Pawn) }
+
+    context 'when there is space between rook and target piece' do
+
     let(:chess) { instance_double(Board, board: [
       ['1', '3', '2', '', '', '', '', ''],
       ['1', 'Rook', '2', '', '', '', '', ''],
@@ -326,28 +348,67 @@ describe Rook do
       ['1', '', '2', '', '', '', '', ''],
       ['1', '', '2', '', '', '', '', ''],
       ['1', 'Pawn', '2', '', '', '', '', ''],
-      ['1', '3', '2', '', '', '', '', '']
-    ], start_coordinates: [2, 2], finish_coordinates: [2, 7], start_square: 'Rook', finish_square: 'Pawn') }
-
-    let(:pawn) { instance_double(Pawn) }
-
-    context 'when there is space between rook and target piece' do
-
+      ['1', '3', '2', '', '', '', '', ''] ], 
+      start_coordinates: [2, 2], 
+      finish_coordinates: [2, 7], 
+      start_square: 'Rook', 
+      finish_square: 'Pawn') }
+  
       it 'return true' do
         expect(rook_column.space_between_column?(chess)).to eq(true)
       end
     end
 
     context 'when there is a piece between rook and target piece' do
+
+      let(:chess) { instance_double(Board, board: [
+        ['1', '3', '2', '', '', '', '', ''],
+        ['1', 'Rook', '2', '', '', '', '', ''],
+        ['1', '', '2', '', '', '', '', ''],
+        ['1', '', '2', '', '', '', '', ''],
+        ['1', '', '2', '', '', '', '', ''],
+        ['1', '', '2', '', '', '', '', ''],
+        ['1', 'Pawn', '2', '', '', '', '', ''],
+        ['1', '3', '2', '', '', '', '', ''] ], 
+        start_coordinates: [2, 2], 
+        finish_coordinates: [2, 7], 
+        start_square: 'Rook', 
+        finish_square: 'Pawn') }
+
       before do 
         chess.board[3][1] = pawn
       end
 
-      xit 'return false' do
+      it 'return false' do
         expect(rook_column.space_between_column?(chess)).to eq(false)
       end
     end
 
+    context ' when Rook is is moving up the board NOT down' do
+      let(:chess) { instance_double(Board, board: [
+        ['1', '3', '2', '', '', '', '', ''],
+        ['1', 'Pawn', '2', '', '', '', '', ''],
+        ['1', '', '2', '', '', '', '', ''],
+        ['1', '', '2', '', '', '', '', ''],
+        ['1', '', '2', '', '', '', '', ''],
+        ['1', '', '2', '', '', '', '', ''],
+        ['1', 'Rook', '2', '', '', '', '', ''],
+        ['1', '3', '2', '', '', '', '', ''] ], 
+        start_coordinates: [2, 7], 
+        finish_coordinates: [2, 2], 
+        start_square: 'Rook', 
+        finish_square: 'Pawn') }
+
+      it 'returns true when path is clear' do
+        expect(rook_column.space_between_column?(chess)).to eq(true)
+      end
+
+      it 'returns false when path is obstructed' do
+        chess.board[3][1] = 'TEST'
+        expect(rook_column.space_between_column?(chess)).to eq(false)
+      end
+
+    end
   end
 end
 
