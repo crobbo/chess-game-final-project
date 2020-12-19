@@ -12,45 +12,73 @@ class Bishop < Piece
   def valid_move?(chess, player)
   end
 
-  def possible_moves
-    find_digaonals
-    find_antediagonals
+  def possible_moves(chess)
+    find_diagonals(chess)
+    find_antediagonals(chess)
   end
 
   def find_diagonals(chess)
     arr = []
-    right_coordinates = chess.start_coordinates
-    left_coordinates = chess.start_coordinates
-    arr << diag_left_loop(left_coordinates)
-    arr << diag_right_loop(right_coordinates)
+    coordinates = chess.start_coordinates
+    arr << diag_bottom_left(coordinates)
+    arr << diag_top_right(coordinates)
     arr
   end
 
-  def diag_left_loop(left_coordinates)
+  def diag_bottom_left(coordinates)
     arr = []
     loop do
-      left_coordinates[0] = left_coordinates[0] - 1
-      left_coordinates[1] = left_coordinates[1] - 1
-      break if left_coordinates.include?(0) || left_coordinates.include?(9)
+      coordinates[0] = coordinates[0] - 1
+      coordinates[1] = coordinates[1] - 1
+      break if coordinates.include?(0) || coordinates.include?(9)
 
-      arr << [left_coordinates[0], left_coordinates[1]]
+      arr << [coordinates[0], coordinates[1]]
     end
     arr
   end
 
-  def diag_right_loop(right_coordinates)
+  def diag_top_right(coordinates)
     arr = []
     loop do
-      right_coordinates[0] = right_coordinates[0] + 1
-      right_coordinates[1] = right_coordinates[1] + 1
-      break if right_coordinates.include?(0) || right_coordinates.include?(9)
+      coordinates[0] = coordinates[0] + 1
+      coordinates[1] = coordinates[1] + 1
+      break if coordinates.include?(0) || coordinates.include?(9)
 
-      arr << [right_coordinates[0], right_coordinates[1]]
+      arr << [coordinates[0], coordinates[1]]
     end
     arr
   end
 
-  def find_antediagonals
+  def find_antediagonals(chess)
+    arr = []
+    coordinates = chess.start_coordinates
+    arr << diag_bottom_right(coordinates)
+    arr << diag_top_left(coordinates)
+    arr
+  end
+
+  def diag_top_left(coordinates)
+    arr = []
+    loop do
+      coordinates[0] = coordinates[0] - 1
+      coordinates[1] = coordinates[1] + 1
+      break if coordinates.include?(0) || coordinates.include?(9)
+
+      arr << [coordinates[0], coordinates[1]]
+    end
+    arr
+  end
+
+  def diag_bottom_right
+    arr = []
+    loop do
+      coordinates[0] = coordinates[0] + 1
+      coordinates[1] = coordinates[1] - 1
+      break if coordinates.include?(0) || coordinates.include?(9)
+
+      arr << [coordinates[0], coordinates[1]]
+    end
+    arr
   end
 
   def space_between_antediagonals
