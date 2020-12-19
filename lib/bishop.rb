@@ -23,6 +23,7 @@ class Bishop < Piece
     left_coordinates = chess.start_coordinates
     arr << diag_left_loop(left_coordinates)
     arr << diag_right_loop(right_coordinates)
+    arr
   end
 
   def diag_left_loop(left_coordinates)
@@ -42,7 +43,8 @@ class Bishop < Piece
     loop do
       right_coordinates[0] = right_coordinates[0] + 1
       right_coordinates[1] = right_coordinates[1] + 1
-      return if right_coordinates.include?(0) || right_coordinates.include?(9)
+      break if right_coordinates.include?(0) || right_coordinates.include?(9)
+
       arr << [right_coordinates[0], right_coordinates[1]]
     end
     arr
