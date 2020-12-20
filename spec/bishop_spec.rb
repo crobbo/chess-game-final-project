@@ -65,10 +65,10 @@ describe Bishop do
     subject(:left_diags) { described_class.new(player_one)}
 
     context 'when start coordinates are inputted' do
-      it 'returns a single array' do
+      it 'returns an array of the south-west diagonals' do
         expect(left_diags.diag_bottom_left([2, 3])).to contain_exactly([1, 2])
       end
-      it 'returns an array of the diagonals' do
+      it 'returns an array of the south-west diagonals' do
         expect(left_diags.diag_bottom_left([4, 7])).to contain_exactly([3, 6], [2, 5], [1, 4])
       end
     end
@@ -78,11 +78,37 @@ describe Bishop do
     subject(:right_diags) { described_class.new(player_one)}
 
     context 'when start coordinates are inputted' do
-      it 'returns a single array' do
+      it 'returns an array of the north-east diagonals' do
         expect(right_diags.diag_top_right([2, 3])).to contain_exactly([3, 4], [4, 5], [5, 6], [6, 7], [7, 8])
       end
-      it 'returns an array of the diagonals' do
+      it 'returns an array of the north-east diagonals' do
         expect(right_diags.diag_top_right([4, 7])).to contain_exactly([5, 8])
+      end
+    end
+  end
+
+  describe 'diag_top_left' do
+    subject(:top_left_diags) { described_class.new(player_one)}
+
+    context 'when start coordinates are inputted' do
+      it 'returns an array of the north-west diagonals' do
+        expect(top_left_diags.diag_top_left([2, 6])).to contain_exactly([1, 7])
+      end
+      it 'returns an array of the north-west diagonals' do
+        expect(top_left_diags.diag_top_left([5, 5])).to contain_exactly([4, 6], [3, 7], [2, 8]) 
+      end
+    end
+  end
+
+  describe 'diag_bottom_right' do
+    subject(:bottom_right_diags) { described_class.new(player_one)}
+
+    context 'when start coordinates are inputted' do
+      it 'returns an array of the south-east diagonals' do
+        expect(bottom_right_diags.diag_bottom_right([1, 2])).to contain_exactly([2, 1])
+      end
+      it 'returns an array of the south-east diagonals' do
+        expect(bottom_right_diags.diag_bottom_right([3, 3])).to contain_exactly([4, 2], [5, 1])
       end
     end
   end

@@ -69,7 +69,7 @@ class Bishop < Piece
     arr
   end
 
-  def diag_bottom_right
+  def diag_bottom_right(coordinates)
     arr = []
     loop do
       coordinates[0] = coordinates[0] + 1
