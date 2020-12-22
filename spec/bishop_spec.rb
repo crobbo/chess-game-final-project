@@ -10,6 +10,78 @@ describe Bishop do
   let(:player_two) { instance_double(Player)}
 
   describe '#valid_move?' do
+    subject(:bishop) { described_class.new(player_one) }
+
+    
+    context 'when moving to an empty square' do
+
+      let(:chess) { instance_double(Board, board: [
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', '']
+      ], start_coordinates: [7, 5], finish_coordinates: [3, 1], start_square: bishop, finish_square: '') }
+      
+      before do
+        chess.board[3][6] = bishop
+      end
+    
+      it 'returns true' do
+        expect(bishop.valid_move?(chess, player_one)).to eq(true)
+      end
+    end
+
+    context 'when moving to a square occupied by opponents piece' do
+
+      let(:chess) { instance_double(Board, board: [
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', '']
+      ], start_coordinates: [7, 5], finish_coordinates: [3, 1], start_square: bishop, finish_square: knight) }
+      
+      let(:knight) { instance_double(Knight, which_player: player_two) }
+
+      before do
+        chess.board[3][6] = bishop
+      end
+
+      it 'returns true' do
+        expect(bishop.valid_move?(chess, player_one)).to eq(true)
+      end
+    end
+
+    context 'when moving to a square occupied by players own piece' do
+
+      let(:chess) { instance_double(Board, board: [
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', '']
+      ], start_coordinates: [7, 5], finish_coordinates: [3, 1], start_square: bishop, finish_square: knight) }
+      
+      let(:knight) { instance_double(Knight, which_player: player_one) }
+
+      before do
+        chess.board[3][6] = bishop
+      end
+
+      it 'returns false' do
+        expect(bishop.valid_move?(chess, player_one)).to eq(false)
+      end
+    end
   end
 
   describe '#possible_moves' do

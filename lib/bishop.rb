@@ -10,11 +10,38 @@ class Bishop < Piece
   end
 
   def valid_move?(chess, player)
+    squares = possible_moves(chess) # nested array 3 deep
+
+    if squares[0][0].include?(chess.finish_coordinates)
+      if space_between_diagonals?(chess, squares[0]) && chess.finish_square == ''
+        true
+      elsif space_between_diagonals?(chess, squares[0]) && chess.finish_square.which_player != player
+        true
+      elsif space_between_diagonals?(chess, squares[0]) && chess.finish_square.which_player == player
+        false
+      else
+        false
+      end
+    elsif squares[1][0].include?(chess.finish_coordinates)
+      if space_between_diagonals?(chess, squares[1]) && chess.finish_square == ''
+        true
+      elsif space_between_antediagonals?(chess, squares[1]) && chess.finish_square.which_player != player
+        true
+      elsif space_between_antediagonals?(chess, squares[1]) && chess.finish_square.which_player == player
+        false
+      else
+        false
+      end
+    else
+      false
+    end
   end
 
   def possible_moves(chess)
-    find_diagonals(chess)
-    find_antediagonals(chess)
+    arr = []
+    arr << find_diagonals(chess)
+    arr << find_antediagonals(chess)
+    arr
   end
 
   def find_diagonals(chess)
