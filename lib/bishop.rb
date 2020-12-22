@@ -96,10 +96,20 @@ class Bishop < Piece
   end
 
   def space_between_diagonals?
+    start = chess.start_coordinates
+    finish = chess.finish_coordinates
+    moves = start[0] < finish[0] ? ante_diags[1] : ante_diags[0].reverse
+    bishop_route = moves[0..moves.index(finish)]
+    bishop_route.pop
+    result = bishop_route.each do |i|
+      square = chess.board[8 - i[1]][i[0] - 1]
+      return false if square != ''
+      break if square != ''
+    end
+    result == false ? false : true
   end
 
   def unicode
     "\u265D"
   end
-
 end

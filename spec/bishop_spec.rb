@@ -114,6 +114,8 @@ describe Bishop do
 
     subject(:antediagonals) { described_class.new(player_one) }
 
+    context 'when there is clear space between start and finish' do
+
     let(:chess) { instance_double(Board, board: [
       ['', '', '', '', '', '', '', ''],
       ['', '', '', '', '', '', '', ''],
@@ -125,7 +127,6 @@ describe Bishop do
       ['', '', '', '', '', '', '', '']
     ], start_coordinates: [2, 6], finish_coordinates: [6, 2]) }
 
-    context 'when there is clear space between start and finish' do
       it 'returns true' do
         expect(antediagonals.space_between_antediagonals?(chess, [[[1, 7]], [[3, 5], [4, 4], [5, 3], [6, 2], [7, 1]]])).to eq(true)
       end
@@ -146,11 +147,36 @@ describe Bishop do
       let(:players_piece) { instance_double(Pawn) }
 
       before do
-         chess.board[4][3] = players_piece
+        chess.board[4][3] = players_piece
       end
 
       it 'returns false' do
         expect(antediagonals.space_between_antediagonals?(chess, [[[1, 7]], [[3, 5], [4, 4], [5, 3], [6, 2], [7, 1]]])).to eq(false)
+      end
+    end
+
+    context 'when x-coordinate of start is greater than finish' do
+
+      let(:chess) { instance_double(Board, board: [
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', '']
+      ], start_coordinates: [6, 2], finish_coordinates: [2, 6]) }
+
+      let(:players_piece) { instance_double(Pawn) }
+
+      it 'returns true when space between' do
+        expect(antediagonals.space_between_antediagonals?(chess, [[[3, 5], [4, 4], [5, 3], [6, 2]], [7, 1], [[1, 7]]] )).to eq(true)
+      end
+
+      it 'returns false when piece in the way' do
+        chess.board[4][3] = players_piece
+        expect(antediagonals.space_between_antediagonals?(chess, [[[3, 5], [4, 4], [5, 3], [6, 2]], [7, 1], [[1, 7]]] )).to eq(false)
       end
     end
   end
