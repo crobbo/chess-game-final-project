@@ -100,13 +100,99 @@ describe Bishop do
   end
 
   describe '#space_between_diagonals?' do
-    context 'when there a players own piece between start and finish' do
-    end
+
+    subject(:diagonals) { described_class.new(player_one) }
 
     context 'when there is clear space between start and finish' do
+
+    let(:chess) { instance_double(Board, board: [
+      ['', '', '', '', '', '', '', ''],
+      ['', '', '', '', '', '', '', ''],
+      ['', '', '', '', '', '', '', ''],
+      ['', '', '', '', '', '', '', ''],
+      ['', '', '', '', '', '', '', ''],
+      ['', '', '', '', '', '', '', ''],
+      ['', '', '', '', '', '', '', ''],
+      ['', '', '', '', '', '', '', '']
+    ], start_coordinates: [1, 1], finish_coordinates: [8, 8]) }
+
+      it 'returns true' do
+        expect(diagonals.space_between_diagonals?(chess, [[[]],[[2, 2],[3, 3], [4, 4], [5, 5], [6, 6], [7, 7], [8, 8]]])).to eq(true)
+      end
     end
 
-    context 'when there is an opponents piece between between start and finish' do
+    context "when a piece is between start and finish" do
+      let(:chess) { instance_double(Board, board: [
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', '']
+      ], start_coordinates: [1, 1], finish_coordinates: [8, 8]) }
+
+      let(:players_piece) { instance_double(Pawn) }
+
+      before do
+        chess.board[4][3] = players_piece
+      end
+
+      it 'returns false' do
+        expect(diagonals.space_between_diagonals?(chess, [[[]],[[2, 2],[3, 3], [4, 4], [5, 5], [6, 6], [7, 7], [8, 8]]])).to eq(false)
+      end
+    end
+
+    context 'when x-coordinate of start is greater than finish' do
+
+      let(:chess) { instance_double(Board, board: [
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', '']
+      ], start_coordinates: [8, 8], finish_coordinates: [1, 1]) }
+
+      let(:players_piece) { instance_double(Pawn) }
+
+      it 'returns true when space between' do
+        expect(diagonals.space_between_diagonals?(chess, [[[7, 7], [6, 6], [5, 5], [4, 4], [3, 3], [2, 2], [1, 1]], [[]]] )).to eq(true)
+      end
+
+      it 'returns false when piece in the way' do
+        chess.board[4][3] = players_piece
+        expect(diagonals.space_between_diagonals?(chess, [[[7, 7], [6, 6], [5, 5], [4, 4], [3, 3], [2, 2], [1, 1]], [[]]])).to eq(false)
+      end
+    end
+  
+
+    context 'when x-coordinate of start is greater than finish' do
+
+      let(:chess) { instance_double(Board, board: [
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', '']
+      ], start_coordinates: [6, 6], finish_coordinates: [2, 2]) }
+
+      let(:players_piece) { instance_double(Pawn) }
+
+      it 'returns true when space between' do
+        expect(diagonals.space_between_diagonals?(chess, [[[5, 5], [4, 4], [3, 3], [2, 2], [1, 1]], [[7, 7], [8, 8]]])).to eq(true)
+      end
+
+      it 'returns false when piece in the way' do
+        chess.board[4][3] = players_piece
+        expect(diagonals.space_between_diagonals?(chess, [[[7, 7], [6, 6], [5, 5], [4, 4], [3, 3], [2, 2], [1, 1]], [[]]])).to eq(false)
+      end
     end
   end
 

@@ -84,7 +84,7 @@ class Bishop < Piece
   def space_between_antediagonals?(chess, ante_diags)
     start = chess.start_coordinates
     finish = chess.finish_coordinates
-    moves = start[0] < finish[0] ? ante_diags[1] : ante_diags[0].reverse
+    moves = start[0] < finish[0] ? ante_diags[1] : ante_diags[0]
     bishop_route = moves[0..moves.index(finish)]
     bishop_route.pop
     result = bishop_route.each do |i|
@@ -95,10 +95,10 @@ class Bishop < Piece
     result == false ? false : true
   end
 
-  def space_between_diagonals?
+  def space_between_diagonals?(chess, diags)
     start = chess.start_coordinates
     finish = chess.finish_coordinates
-    moves = start[0] < finish[0] ? ante_diags[1] : ante_diags[0].reverse
+    moves = start[0] < finish[0] ? diags[1] : diags[0]
     bishop_route = moves[0..moves.index(finish)]
     bishop_route.pop
     result = bishop_route.each do |i|
