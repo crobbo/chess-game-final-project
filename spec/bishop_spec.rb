@@ -1,6 +1,8 @@
 require 'rspec/autorun'
 require_relative '../lib/player'
 require_relative '../lib/board'
+require_relative '../lib/pawn'
+
 
 describe Bishop do
 
@@ -129,10 +131,27 @@ describe Bishop do
       end
     end
 
-    context "when a player's own piece between start and finish" do
-    end
+    context "when a piece is between start and finish" do
+      let(:chess) { instance_double(Board, board: [
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', '']
+      ], start_coordinates: [2, 6], finish_coordinates: [6, 2]) }
 
-    context 'when there is an opponents piece between between start and finish' do
+      let(:players_piece) { instance_double(Pawn) }
+
+      before do
+         chess.board[4][3] = players_piece
+      end
+
+      it 'returns false' do
+        expect(antediagonals.space_between_antediagonals?(chess, [[[1, 7]], [[3, 5], [4, 4], [5, 3], [6, 2], [7, 1]]])).to eq(false)
+      end
     end
   end
 end
