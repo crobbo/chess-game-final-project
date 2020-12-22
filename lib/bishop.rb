@@ -52,8 +52,8 @@ class Bishop < Piece
   def find_antediagonals(chess)
     arr = []
     coordinates = chess.start_coordinates
-    arr << diag_bottom_right(coordinates)
     arr << diag_top_left(coordinates)
+    arr << diag_bottom_right(coordinates)
     arr
   end
 
@@ -81,10 +81,21 @@ class Bishop < Piece
     arr
   end
 
-  def space_between_antediagonals
+  def space_between_antediagonals?(chess, ante_diags)
+    start = chess.start_coordinates
+    finish = chess.finish_coordinates
+    moves = start[0] < finish[0] ? ante_diags[1] : ante_diags[0].reverse
+    bishop_route = moves[0..moves.index(finish)]
+    bishop_route.pop
+    result = bishop_route.each do |i|
+      square = chess.board[8 - i[1]][i[0]- 1]
+      return false if square != ''
+      break if square != ''
+    end
+    result == false ? false : true
   end
 
-  def space_between_diagonals
+  def space_between_diagonals?
   end
 
   def unicode

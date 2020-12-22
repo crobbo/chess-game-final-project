@@ -15,7 +15,7 @@ describe Bishop do
 
   describe '#find_diagonals' do
     subject(:bishop_diags) { described_class.new(player_one) }
-    let(:chess) { instance_double(Board, start_coordinates: [2, 3] ) }
+    let(:chess) { instance_double(Board, start_coordinates: [2, 3]) }
 
     before do
       allow(bishop_diags).to receive(:diag_bottom_left).and_return([[1, 2]])
@@ -30,34 +30,18 @@ describe Bishop do
   end
 
   describe '#find_antediagonals' do
-    subject(:bishops_antediags) { described_class(player_one) }
-    let(:chess) { instance_double(Board, ) }
+    subject(:bishops_antediags) { described_class.new(player_one) }
+    let(:chess) { instance_double(Board, start_coordinates: [6, 6]) }
 
-    context 'when find_antedigonals is called' do
-      xit 'returns an array of all possible diagonal moves' do
+    before do
+      allow(bishops_antediags).to receive(:diag_top_left).and_return([[1, 7]])
+      allow(bishops_antediags).to receive(:diag_bottom_right).and_return([[3, 5], [4, 4], [5, 3], [6, 2], [7, 1]]) 
+    end
+
+    context 'when #find_antedigonals is called' do
+      it 'returns an array of all possible diagonal moves' do
+        expect(bishops_antediags.find_antediagonals(chess)).to eq([[[1, 7]], [[3, 5], [4, 4], [5, 3], [6, 2], [7, 1]]])
       end
-    end
-  end
-
-  describe '#space_between_diagonals' do
-    context 'when there a players own piece between start and finish' do
-    end
-
-    context 'when there is clear space between start and finish' do
-    end
-
-    context 'when there is an opponents piece between between start and finish' do
-    end
-  end
-
-  describe '#space_between_antediagonals' do
-    context 'when there a players own piece between start and finish' do
-    end
-
-    context 'when there is clear space between start and finish' do
-    end
-
-    context 'when there is an opponents piece between between start and finish' do
     end
   end
 
@@ -110,6 +94,45 @@ describe Bishop do
       it 'returns an array of the south-east diagonals' do
         expect(bottom_right_diags.diag_bottom_right([3, 3])).to contain_exactly([4, 2], [5, 1])
       end
+    end
+  end
+
+  describe '#space_between_diagonals?' do
+    context 'when there a players own piece between start and finish' do
+    end
+
+    context 'when there is clear space between start and finish' do
+    end
+
+    context 'when there is an opponents piece between between start and finish' do
+    end
+  end
+
+  describe '#space_between_antediagonals?' do
+
+    subject(:antediagonals) { described_class.new(player_one) }
+
+    let(:chess) { instance_double(Board, board: [
+      ['', '', '', '', '', '', '', ''],
+      ['', '', '', '', '', '', '', ''],
+      ['', '', '', '', '', '', '', ''],
+      ['', '', '', '', '', '', '', ''],
+      ['', '', '', '', '', '', '', ''],
+      ['', '', '', '', '', '', '', ''],
+      ['', '', '', '', '', '', '', ''],
+      ['', '', '', '', '', '', '', '']
+    ], start_coordinates: [2, 6], finish_coordinates: [6, 2]) }
+
+    context 'when there is clear space between start and finish' do
+      it 'returns true' do
+        expect(antediagonals.space_between_antediagonals?(chess, [[[1, 7]], [[3, 5], [4, 4], [5, 3], [6, 2], [7, 1]]])).to eq(true)
+      end
+    end
+
+    context "when a player's own piece between start and finish" do
+    end
+
+    context 'when there is an opponents piece between between start and finish' do
     end
   end
 end
