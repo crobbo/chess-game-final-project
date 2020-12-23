@@ -3,7 +3,6 @@ require_relative '../lib/player'
 require_relative '../lib/board'
 require_relative '../lib/pawn'
 
-
 describe Bishop do
 
   let(:player_one) { instance_double(Player)}
@@ -12,7 +11,7 @@ describe Bishop do
   describe '#valid_move?' do
     subject(:bishop) { described_class.new(player_one) }
 
-    
+
     context 'when moving to an empty square' do
 
       let(:chess) { instance_double(Board, board: [
@@ -25,11 +24,11 @@ describe Bishop do
         ['', '', '', '', '', '', '', ''],
         ['', '', '', '', '', '', '', '']
       ], start_coordinates: [7, 5], finish_coordinates: [3, 1], start_square: bishop, finish_square: '') }
-      
+
       before do
         chess.board[3][6] = bishop
       end
-    
+
       it 'returns true' do
         expect(bishop.valid_move?(chess, player_one)).to eq(true)
       end
@@ -47,11 +46,12 @@ describe Bishop do
         ['', '', '', '', '', '', '', ''],
         ['', '', '', '', '', '', '', '']
       ], start_coordinates: [7, 5], finish_coordinates: [3, 1], start_square: bishop, finish_square: knight) }
-      
+
       let(:knight) { instance_double(Knight, which_player: player_two) }
 
       before do
         chess.board[3][6] = bishop
+        chess.board[7][2] = knight
       end
 
       it 'returns true' do
@@ -71,8 +71,32 @@ describe Bishop do
         ['', '', '', '', '', '', '', ''],
         ['', '', '', '', '', '', '', '']
       ], start_coordinates: [7, 5], finish_coordinates: [3, 1], start_square: bishop, finish_square: knight) }
-      
+
       let(:knight) { instance_double(Knight, which_player: player_one) }
+
+      before do
+        chess.board[3][6] = bishop
+        chess.board[7][2] = knight
+
+      end
+
+      it 'returns false' do
+        expect(bishop.valid_move?(chess, player_one)).to eq(false)
+      end
+    end
+
+    context 'when moving to a sqaure that is not a diagonal' do
+
+      let(:chess) { instance_double(Board, board: [
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', '']
+      ], start_coordinates: [7, 5], finish_coordinates: [1, 1], start_square: bishop, finish_square: '') }
 
       before do
         chess.board[3][6] = bishop
@@ -82,39 +106,59 @@ describe Bishop do
         expect(bishop.valid_move?(chess, player_one)).to eq(false)
       end
     end
+
   end
 
-  describe '#possible_moves' do
-  end
+  # describe '#possible_moves' do
+  # end
 
   describe '#find_diagonals' do
     subject(:bishop_diags) { described_class.new(player_one) }
-    let(:chess) { instance_double(Board, start_coordinates: [2, 3]) }
-
-    before do
-      allow(bishop_diags).to receive(:diag_bottom_left).and_return([[1, 2]])
-      allow(bishop_diags).to receive(:diag_top_right).and_return([[3, 4], [4, 5], [5, 6], [6, 7], [7, 8]])
-    end
 
     context 'when find_diagonals is called' do
+      let(:chess) { instance_double(Board, start_coordinates: [2, 3]) }
+
+      before do
+        allow(bishop_diags).to receive(:diag_bottom_left).and_return([[1, 2]])
+        allow(bishop_diags).to receive(:diag_top_right).and_return([[3, 4], [4, 5], [5, 6], [6, 7], [7, 8]])
+      end
+
       it 'returns a nested array of all possible diagonal moves' do
         expect(bishop_diags.find_diagonals(chess)).to eq([[[1, 2]], [[3, 4], [4, 5], [5, 6], [6, 7], [7, 8]] ])
+      end
+    end
+
+    context 'when start coordinates are inputed' do
+      let(:chess) { instance_double(Board, start_coordinates: [7, 5]) }
+
+      it 'returns a nested array of diagonals' do
+        expect(bishop_diags.find_diagonals(chess)).to eq([[[6, 4], [5, 3], [4, 2], [3, 1]], [[8, 6]]])
       end
     end
   end
 
   describe '#find_antediagonals' do
     subject(:bishops_antediags) { described_class.new(player_one) }
-    let(:chess) { instance_double(Board, start_coordinates: [6, 6]) }
-
-    before do
-      allow(bishops_antediags).to receive(:diag_top_left).and_return([[1, 7]])
-      allow(bishops_antediags).to receive(:diag_bottom_right).and_return([[3, 5], [4, 4], [5, 3], [6, 2], [7, 1]]) 
-    end
 
     context 'when #find_antedigonals is called' do
+
+      let(:chess) { instance_double(Board, start_coordinates: [6, 6]) }
+
+      before do
+        allow(bishops_antediags).to receive(:diag_top_left).and_return([[1, 7]])
+        allow(bishops_antediags).to receive(:diag_bottom_right).and_return([[3, 5], [4, 4], [5, 3], [6, 2], [7, 1]]) 
+      end
+
       it 'returns an array of all possible diagonal moves' do
         expect(bishops_antediags.find_antediagonals(chess)).to eq([[[1, 7]], [[3, 5], [4, 4], [5, 3], [6, 2], [7, 1]]])
+      end
+    end
+
+    context 'when start coordinates are inputed' do
+      let(:chess) { instance_double(Board, start_coordinates: [7, 5]) }
+
+      it 'returns a nested array of diagonals' do
+        expect(bishops_antediags.find_antediagonals(chess)).to eq([[[6, 6], [5, 7], [4, 8]], [[8, 4]]])
       end
     end
   end

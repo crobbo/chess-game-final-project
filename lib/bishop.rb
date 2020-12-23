@@ -13,27 +13,38 @@ class Bishop < Piece
     squares = possible_moves(chess) # nested array 3 deep
 
     if squares[0][0].include?(chess.finish_coordinates)
+      # binding.pry
       if space_between_diagonals?(chess, squares[0]) && chess.finish_square == ''
-        true
+        # binding.pry
+        return true
       elsif space_between_diagonals?(chess, squares[0]) && chess.finish_square.which_player != player
-        true
+        # binding.pry        
+        return true
       elsif space_between_diagonals?(chess, squares[0]) && chess.finish_square.which_player == player
-        false
+        # binding.pry
+        return false
       else
-        false
+        # binding.pry
+        return false
       end
     elsif squares[1][0].include?(chess.finish_coordinates)
+      # binding.pry
       if space_between_diagonals?(chess, squares[1]) && chess.finish_square == ''
-        true
+        # binding.pry
+        return true
       elsif space_between_antediagonals?(chess, squares[1]) && chess.finish_square.which_player != player
-        true
+        # binding.pry
+        return true
       elsif space_between_antediagonals?(chess, squares[1]) && chess.finish_square.which_player == player
-        false
+        # binding.pry
+        return false
       else
-        false
+        # binding.pry
+        return false
       end
     else
-      false
+      # binding.pry
+      return false
     end
   end
 
@@ -46,9 +57,10 @@ class Bishop < Piece
 
   def find_diagonals(chess)
     arr = []
-    coordinates = chess.start_coordinates
-    arr << diag_bottom_left(coordinates)
-    arr << diag_top_right(coordinates)
+    left_coordinates = chess.start_coordinates.map(&:clone)
+    right_coordinates = chess.start_coordinates.map(&:clone)
+    arr << diag_bottom_left(left_coordinates)
+    arr << diag_top_right(right_coordinates)
     arr
   end
 
@@ -78,9 +90,10 @@ class Bishop < Piece
 
   def find_antediagonals(chess)
     arr = []
-    coordinates = chess.start_coordinates
-    arr << diag_top_left(coordinates)
-    arr << diag_bottom_right(coordinates)
+    left_coordinates = chess.start_coordinates.map(&:clone)
+    right_coordinates = chess.start_coordinates.map(&:clone)
+    arr << diag_top_left(left_coordinates)
+    arr << diag_bottom_right(right_coordinates)
     arr
   end
 
