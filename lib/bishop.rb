@@ -13,37 +13,26 @@ class Bishop < Piece
     squares = possible_moves(chess) # nested array 3 deep
 
     if squares[0][0].include?(chess.finish_coordinates)
-      # binding.pry
       if space_between_diagonals?(chess, squares[0]) && chess.finish_square == ''
-        # binding.pry
         return true
       elsif space_between_diagonals?(chess, squares[0]) && chess.finish_square.which_player != player
-        # binding.pry        
         return true
       elsif space_between_diagonals?(chess, squares[0]) && chess.finish_square.which_player == player
-        # binding.pry
         return false
       else
-        # binding.pry
         return false
       end
     elsif squares[1][0].include?(chess.finish_coordinates)
-      # binding.pry
       if space_between_diagonals?(chess, squares[1]) && chess.finish_square == ''
-        # binding.pry
         return true
       elsif space_between_antediagonals?(chess, squares[1]) && chess.finish_square.which_player != player
-        # binding.pry
         return true
       elsif space_between_antediagonals?(chess, squares[1]) && chess.finish_square.which_player == player
-        # binding.pry
         return false
       else
-        # binding.pry
         return false
       end
     else
-      # binding.pry
       return false
     end
   end
