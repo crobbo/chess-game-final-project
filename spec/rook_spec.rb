@@ -189,7 +189,6 @@ describe Rook do
         expect(rook_moves.possible_moves(start_coordinates)).to eq([[[1, 3], [2, 3], [3, 3]], [[4, 1], [4, 2]]])
       end
     end
-
   end
 
   describe '#find_row_squares' do

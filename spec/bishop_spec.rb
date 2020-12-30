@@ -109,8 +109,8 @@ describe Bishop do
 
   end
 
-  # describe '#possible_moves' do
-  # end
+  describe '#possible_moves' do
+  end
 
   describe '#find_diagonals' do
     subject(:bishop_diags) { described_class.new(player_one) }

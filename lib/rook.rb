@@ -48,13 +48,11 @@ class Rook < Piece
     row.index(chess.start_square) < row.index(chess.finish_square) ? row : row = row.reverse
     start = row.index(chess.start_square) + 1
     finish = row.index(chess.finish_square) - 1
-    # binding.pry
     result = row[start..finish].each do |x|
       return false if x != ''
       break if x != ''
     end
     result == false ? false : true
-    # binding.pry
   end
 
   def transpose_column(chess)
