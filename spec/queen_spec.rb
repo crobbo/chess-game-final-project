@@ -10,27 +10,77 @@ describe Queen do
   let(:player_two) { instance_double(Player)}
 
   describe 'valid_move?' do
+
     context 'queen is making a diagonal move' do
 
-      xit 'returns true if finish square contains opponents piece' do
+      subject(:queen) { described_class.new(player_two) }
+
+      let(:chess) { instance_double(Board, board: [
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', '']
+      ], start_coordinates: [6, 2], finish_coordinates: [2, 6], start_square: queen )}
+
+      let(:pawn_player_two) { instance_double(Pawn, which_player: player_two) }
+      let(:pawn_player_one) { instance_double(Pawn, which_player: player_one) }
+
+
+      it 'returns true if finish square contains opponents piece' do
+        chess.board[2][1] = pawn_player_one
+        allow(chess).to receive(:finish_square).and_return(pawn_player_one)
+        expect(queen.valid_move?(chess, player_two)).to eq(true)
       end
 
-      xit 'returns false if finish square contains players own piece' do
+      it 'returns false if finish square contains players own piece' do 
+        chess.board[2][1] = pawn_player_two
+        allow(chess).to receive(:finish_square).and_return(pawn_player_two)
+        expect(queen.valid_move?(chess, player_two)).to eq(false)
       end
 
-      xit 'returns true if finish square is empty' do
+      it 'returns true if finish square is empty' do
+        allow(chess).to receive(:finish_square).and_return('')
+        expect(queen.valid_move?(chess, player_two)).to eq(true)
       end
     end
 
     context 'queen is making  move horizontal or vertical move' do
 
-      xit 'returns true if finish square contains opponents piece' do
+      subject(:queen_straight) { described_class.new(player_one) }
+
+      let(:chess) { instance_double(Board, board: [
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', '']
+      ], start_coordinates: [7, 7], finish_coordinates: [2, 7], start_square: queen_straight )}
+
+      let(:pawn_player_two) { instance_double(Pawn, which_player: player_two) }
+      let(:pawn_player_one) { instance_double(Pawn, which_player: player_one) }
+
+      it 'returns true if finish square contains opponents piece' do
+        chess.board[1][1] = pawn_player_two
+        allow(chess).to receive(:finish_square).and_return(pawn_player_two)
+        expect(queen_straight.valid_move?(chess, player_one)).to eq(true)
       end
 
-      xit 'returns false if finish square contains players own piece' do
+      it 'returns false if finish square contains players own piece' do
+        chess.board[1][1] = pawn_player_one
+        allow(chess).to receive(:finish_square).and_return(pawn_player_one)
+        expect(queen_straight.valid_move?(chess, player_one)).to eq(false)
       end
 
-      xit 'returns true if finish square is empty' do
+      it 'returns true if finish square is empty' do
+        allow(chess).to receive(:finish_square).and_return('')
+        expect(queen_straight.valid_move?(chess, player_one)).to eq(true)
       end
     end
   end

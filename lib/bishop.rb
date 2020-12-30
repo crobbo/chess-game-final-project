@@ -5,13 +5,9 @@ require 'pry'
 
 class Bishop < Piece
 
-  def moves
-    # bishop move diagonal so could be many diferent squares that it could move to
-  end
-
   def valid_move?(chess, player)
-    squares = possible_moves(chess) # nested array 3 deep
-
+    squares = possible_moves(chess)
+    binding.pry
     if squares[0][0].include?(chess.finish_coordinates)
       if space_between_diagonals?(chess, squares[0]) && chess.finish_square == ''
         return true

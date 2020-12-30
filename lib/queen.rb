@@ -8,8 +8,72 @@ class Queen < Piece
     # Queen can move anywhere on the board.
   end
 
-  def valid_move?
-    # somehting here
+  def valid_move?(chess, player)
+    squares = possible_moves(chess) 
+
+    if squares[0][0].include?(chess.finish_coordinates) && space_between_diagonals?(chess, squares[0])
+      if chess.finish_square == ''
+        return true
+      elsif chess.finish_square.which_player != player
+        return true
+      elsif chess.finish_square.which_player == player
+        return false
+      else
+        return false
+      end
+    elsif squares[0][1].include?(chess.finish_coordinates) && space_between_diagonals?(chess, squares[0])
+      if chess.finish_square == ''
+        return true
+      elsif chess.finish_square.which_player != player
+        return true
+      elsif chess.finish_square.which_player == player
+        return false
+      else
+        return false
+      end
+    elsif squares[1][0].include?(chess.finish_coordinates) && space_between_antediagonals?(chess, squares[1])
+      if chess.finish_square == ''
+        return true
+      elsif chess.finish_square.which_player != player
+        return true
+      elsif chess.finish_square.which_player == player
+        return false
+      else
+        return false
+      end
+    elsif squares[1][1].include?(chess.finish_coordinates) && space_between_antediagonals?(chess, squares[1])
+      if chess.finish_square == ''
+        return true
+      elsif chess.finish_square.which_player != player
+        return true
+      elsif chess.finish_square.which_player == player
+        return false
+      else
+        return false
+      end
+    elsif squares[2].include?(chess.finish_coordinates) && space_between_row?(chess)
+      if chess.finish_square == ''
+        return true
+      elsif chess.finish_square.which_player != player
+        return true
+      elsif chess.finish_square.which_player == player
+        return false
+      else
+        return false
+      end
+    elsif squares[3].include?(chess.finish_coordinates) && space_between_column?(chess)
+      if chess.finish_square == ''
+        return true
+      elsif chess.finish_square.which_player != player
+        return true
+      elsif chess.finish_square.which_player == player
+        return false
+      else
+        return false
+      end
+    else 
+      false
+    end
   end
 
   def possible_moves(chess)
