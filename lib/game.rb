@@ -15,6 +15,7 @@ class Game
 
   def play
     introduction
+    @chess.board_pretty_print
     until checkmate?
       valid_move
       @chess.reset_variables
