@@ -3,6 +3,13 @@
 require_relative 'piece'
 
 class Knight < Piece
+  attr_reader :type, :valid
+  
+  def initialize(player)
+    @type = 'Kight'
+    @valid = super
+  end
+
   def moves
     [ 
       [-1, 2],

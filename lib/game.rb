@@ -15,10 +15,11 @@ class Game
 
   def play
     introduction
-    @chess.board_pretty_print
     until checkmate?
+      @chess.board_pretty_print
       valid_move
       @chess.reset_variables
+      set_turn
     end
   end
 
@@ -33,7 +34,6 @@ class Game
 
   def valid_move
     unless move_piece
-      # binding.pry
       @error.invalid_move
       move_piece
     end
@@ -41,8 +41,6 @@ class Game
 
   def move_piece
     @chess.choose_coordinates
-    binding.pry
-    # @chess.board[8 - @chess.start_coordinates[1]][@chess.start_coordinates[0] - 1] == '' 
     return false if @chess.board[8 - @chess.start_coordinates[1]][@chess.start_coordinates[0] - 1] == ''
     return false unless @chess.start_square.which_player == whos_turn  # checks player is moving piece which belongs to them
     return false unless @chess.start_square.valid_move?(@chess, whos_turn)
@@ -79,8 +77,10 @@ class Game
     name = arr.sample
     if @player_one.data[:name] == name
       @player_one.data[:next_turn] = true
+      @player_two.data[:next_turn] = false
     else
       @player_two.data[:next_turn] = true
+      @player_one.data[:next_turn] = false
     end
     name.upcase
   end
@@ -89,6 +89,16 @@ class Game
   end
 
   def check?
+  end
+
+  def set_turn
+    if @player_one.data[:next_turn]
+      @player_two.data[:next_turn] = true
+      @player_one.data[:next_turn] = false
+    else
+      @player_two.data[:next_turn] = false
+      @player_one.data[:next_turn] = true
+    end
   end
 
   def whos_turn
