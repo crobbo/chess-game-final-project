@@ -4,9 +4,10 @@ require_relative 'piece'
 
 class Knight < Piece
   attr_reader :type, :valid
-  
+
   def initialize(player)
-    @type = 'Kight'
+    @which_player = super
+    @type = 'Knight'
     @valid = super
   end
 
@@ -47,6 +48,10 @@ class Knight < Piece
   end
 
   def unicode
-    "\u265E"
+    if self.which_player.data[:number] == 1
+      "\u265E"
+    else
+      "\u2658"
+    end
   end
 end

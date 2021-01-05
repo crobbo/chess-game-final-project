@@ -4,6 +4,13 @@ require_relative 'piece'
 require 'pry'
 
 class King < Piece
+
+  def initialize(player)
+    @which_player = super
+    @type = 'King'
+    @valid = super
+  end
+
   def moves
     [
       [1, 1],
@@ -43,7 +50,10 @@ class King < Piece
   end
 
   def unicode
-    "\u265A"
+    if self.which_player.data[:number] == 1
+      "\u265A"
+    else
+      "\u2654"
+    end
   end
-
 end

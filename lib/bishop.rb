@@ -5,6 +5,12 @@ require 'pry'
 
 class Bishop < Piece
 
+  def initialize(player)
+    @which_player = super
+    @type = 'Bishop'
+    @valid = super
+  end
+
   def valid_move?(chess, player)
     squares = possible_moves(chess)
     binding.pry
@@ -135,6 +141,10 @@ class Bishop < Piece
   end
 
   def unicode
-    "\u265D"
+    if self.which_player.data[:number] == 1
+      "\u265D"
+    else
+      "\u2657"
+    end
   end
 end

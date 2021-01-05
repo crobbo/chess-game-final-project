@@ -4,12 +4,15 @@ require_relative 'piece'
 require 'pry'
 
 class Rook < Piece
-  def moves
-   # Rooks can move anywhere vertically or horizontally
+
+  def initialize(player)
+    @which_player = super
+    @type = 'Rook'
+    @valid = super
   end
 
-  def unicode
-    "\u265C"
+  def moves
+   # Rooks can move anywhere vertically or horizontally
   end
 
   def valid_move?(chess, player)
@@ -105,4 +108,11 @@ class Rook < Piece
     arr
   end
 
+  def unicode
+    if self.which_player.data[:number] == 1
+      "\u265C"
+    else
+      "\u2656"
+    end
+  end
 end

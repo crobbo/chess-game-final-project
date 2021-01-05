@@ -16,6 +16,7 @@ class Game
   def play
     introduction
     until checkmate?
+      binding.pry
       @chess.board_pretty_print
       valid_move
       @chess.reset_variables

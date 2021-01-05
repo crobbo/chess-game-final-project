@@ -4,6 +4,12 @@ require_relative 'piece'
 
 class Queen < Piece
 
+  def initialize(player)
+    @which_player = super
+    @type = 'Queen'
+    @valid = super
+  end
+
   def moves
     # Queen can move anywhere on the board.
   end
@@ -246,7 +252,11 @@ class Queen < Piece
 
 
   def unicode
-    "\u265B"
+    if self.which_player.data[:number] == 1
+      "\u265B"
+    else
+      "\u2655"
+    end
   end
 
 end
