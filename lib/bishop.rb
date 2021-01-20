@@ -5,15 +5,16 @@ require 'pry'
 
 class Bishop < Piece
 
+  attr_reader :type
+
   def initialize(player)
-    @which_player = super
+    @which_player = player
     @type = 'Bishop'
-    @valid = super
+    @valid = true
   end
 
   def valid_move?(chess, player)
     squares = possible_moves(chess)
-    binding.pry
     if squares[0][0].include?(chess.finish_coordinates)
       if space_between_diagonals?(chess, squares[0]) && chess.finish_square == ''
         return true

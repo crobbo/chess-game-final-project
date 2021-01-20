@@ -5,9 +5,9 @@ require_relative 'piece'
 class Queen < Piece
 
   def initialize(player)
-    @which_player = super
+    @which_player = player
     @type = 'Queen'
-    @valid = super
+    @valid = true
   end
 
   def moves
@@ -117,6 +117,7 @@ class Queen < Piece
     return false unless chess.start_coordinates[0] == chess.finish_coordinates[0]
 
     row = transpose_column(chess)
+    # binding.pry
     row.index(chess.start_square) < row.index(chess.finish_square) ? row : row = row.reverse
     start = row.index(chess.start_square) + 1
     finish = row.index(chess.finish_square) - 1
@@ -249,7 +250,6 @@ class Queen < Piece
     end
     result == false ? false : true
   end
-
 
   def unicode
     if self.which_player.data[:number] == 1

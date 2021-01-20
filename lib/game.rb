@@ -4,10 +4,9 @@ require_relative 'errors'
 
 # Controls the gameplay
 class Game
-  attr_reader :board
-
-  def initialize(player1, player2)
-    @chess = Board.new(player1, player2)
+  
+  def initialize(player1, player2, board_class = Board.new(player1, player2))
+    @chess = board_class
     @player_one = player1
     @player_two = player2
     @error = Errors.new
@@ -15,13 +14,18 @@ class Game
 
   def play
     introduction
-    until checkmate?
-      binding.pry
+    loop do
+      puts "#{whos_turn.data[:name]}'s go!"
       @chess.board_pretty_print
+      binding.pry
       valid_move
+      check?(opponents_king_coordinates) ? print_check_message : nil # improve upon this by limtiing the next players move to only moves are a king and out of check.
+      break if checkmate?
+
       @chess.reset_variables
       set_turn
     end
+    game_over # write this
   end
 
   def introduction
@@ -52,6 +56,7 @@ class Game
   end
 
   def adjust_board
+    binding.pry
     @chess.board[8 - @chess.finish_coordinates[1]][@chess.finish_coordinates[0] - 1] = @chess.start_square
     @chess.board[8 - @chess.start_coordinates[1]][@chess.start_coordinates[0] - 1] = ''
   end
@@ -78,8 +83,8 @@ class Game
     name = arr.sample
     if @player_one.data[:name] == name
       @player_one.data[:next_turn] = true
-      @player_two.data[:next_turn] = false
-    else
+      @p
+
       @player_two.data[:next_turn] = true
       @player_one.data[:next_turn] = false
     end
@@ -87,9 +92,48 @@ class Game
   end
 
   def checkmate?
+    in_check = 0
+    king = @chess.board[8 - @chess.finish_coordinates[1]][@chess.finish_coordinates[0] - 1]
+    possible_moves = king.possible_moves(@chess.finish_coordinates)
+    moves = possible_moves.each.filter { |x| ((x[0].positive? && x[0] < 9) && (x[1].positive? && x[1] < 9)) }
+    moves.each { |a| check?(a) ? (in_check += 1) : nil }
+    in_check == moves.length ? true : false
   end
 
-  def check?
+  def check?(king_coordinates)
+    check = false
+    @chess.board.each do |array|
+      array.each do |square|
+        next if square == '' || square.which_player != whos_turn
+
+        if square.which_player == whos_turn
+          row = @chess.board.detect { |aa| aa.include?(square) }
+          @chess.start_coordinates = [row.index(square) + 1, 8 - @chess.board.index(row)]
+          @chess.start_square = square
+          square.valid_move?(@chess, square.which_player) ? check = true : next
+        end
+      end
+    end
+    check
+  end
+
+  def opponents_king_coordinates
+    @chess.board.each do |array|
+      array.each do |square|
+        next if square == '' || square.which_player == whos_turn
+
+        if square.type == 'King' && square.which_player != whos_turn
+          row = @chess.board.detect{ |aa| aa.include?(square) }
+          @chess.finish_coordinates = [row.index(square) + 1, 8 - @chess.board.index(row)]
+          @chess.finish_square = square
+        end
+      end
+    end
+  end
+
+  def print_check_message
+    name = whos_turn == @player_one ? @player_two.data[:name] : @player_two.data[:name]
+    puts "#{name}'s King is in Check :/"
   end
 
   def set_turn

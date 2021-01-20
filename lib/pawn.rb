@@ -11,8 +11,8 @@ class Pawn < Piece
   attr_reader :type, :first_move
 
   def initialize(player)
-    @which_player = super
-    @valid = super
+    @which_player = player
+    @valid = true
     @first_move = true
     @type = 'Pawn'
   end

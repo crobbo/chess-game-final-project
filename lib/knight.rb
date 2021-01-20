@@ -4,11 +4,10 @@ require_relative 'piece'
 
 class Knight < Piece
   attr_reader :type, :valid
-
   def initialize(player)
-    @which_player = super
+    @which_player = player
     @type = 'Knight'
-    @valid = super
+    @valid = true
   end
 
   def moves

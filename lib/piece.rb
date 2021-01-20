@@ -3,11 +3,10 @@
 
 
 class Piece
-  attr_reader :which_player, :valid, :moves, :unicode
+  attr_reader :which_player, :valid, :moves, :unicode,
 
-  def initialize(player)
-    @which_player = player
-    @valid = true
+  def type
+    raise NotImplementedError
   end
 
   def valid_move?(start_coordinates, destination_coordinates, board, player)

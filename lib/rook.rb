@@ -5,10 +5,12 @@ require 'pry'
 
 class Rook < Piece
 
+  attr_reader :type
+
   def initialize(player)
-    @which_player = super
+    @which_player = player
     @type = 'Rook'
-    @valid = super
+    @valid = true
   end
 
   def moves

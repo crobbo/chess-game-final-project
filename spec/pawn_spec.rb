@@ -10,9 +10,9 @@ describe Pawn do
 
   describe '#player_one_moves' do
     # possible moves may not all be valid moves
-    
+
     context "Player 1 Pawn is making it's first move" do
-      
+
       subject(:pawn_one) { described_class.new(player_one) }
       let(:start_coordinates) { [4, 7] }
 
