@@ -25,7 +25,27 @@ class Bishop < Piece
       else
         return false
       end
+    elsif squares[0][1].include?(chess.finish_coordinates)
+      if space_between_diagonals?(chess, squares[0]) && chess.finish_square == ''
+        return true
+      elsif space_between_diagonals?(chess, squares[0]) && chess.finish_square.which_player != player
+        return true
+      elsif space_between_diagonals?(chess, squares[0]) && chess.finish_square.which_player == player
+        return false
+      else
+        return false
+      end
     elsif squares[1][0].include?(chess.finish_coordinates)
+      if space_between_diagonals?(chess, squares[1]) && chess.finish_square == ''
+        return true
+      elsif space_between_antediagonals?(chess, squares[1]) && chess.finish_square.which_player != player
+        return true
+      elsif space_between_antediagonals?(chess, squares[1]) && chess.finish_square.which_player == player
+        return false
+      else
+        return false
+      end
+    elsif squares[1][1].include?(chess.finish_coordinates)
       if space_between_diagonals?(chess, squares[1]) && chess.finish_square == ''
         return true
       elsif space_between_antediagonals?(chess, squares[1]) && chess.finish_square.which_player != player

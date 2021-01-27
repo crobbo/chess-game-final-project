@@ -23,10 +23,10 @@ describe Bishop do
         ['', '', '', '', '', '', '', ''],
         ['', '', '', '', '', '', '', ''],
         ['', '', '', '', '', '', '', '']
-      ], start_coordinates: [7, 5], finish_coordinates: [3, 1], start_square: bishop, finish_square: '') }
+      ], start_coordinates: [3, 8], finish_coordinates: [8, 3], start_square: bishop, finish_square: '') }
 
       before do
-        chess.board[3][6] = bishop
+        chess.board[0][2] = bishop
       end
 
       it 'returns true' do

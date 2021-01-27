@@ -100,16 +100,6 @@ class Board
     @board[8-y][x-1]
   end
 
-  # def user_input
-  #   num = loop do
-  #     num = Integer(gets) rescue nil
-  #     break num if num && num < 9 && num > 0
-
-  #     puts "you didn't enter a valid number..."
-  #   end
-  #   return num
-  # end
-
   def user_input
     num = Integer(gets)
     if num.positive? && num < 9
