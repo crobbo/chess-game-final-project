@@ -10,6 +10,8 @@ class Game
     @player_one = player1
     @player_two = player2
     @error = Errors.new
+    @player_one_in_check = false
+    @player_two_in_check = false
   end
 
   def play
@@ -17,15 +19,19 @@ class Game
     loop do
       puts "#{whos_turn.data[:name]}'s go!"
       @chess.board_pretty_print
-      # binding.pry
       valid_move
-      check?(opponents_king_coordinates) ? print_check_message : nil # improve upon this by limtiing the next players move to only moves are a king and out of check.
-      break if checkmate?
+      if @player_one_in_check
+        binding.pry
+        checkmate?(player_one) ? game_over : @player_one_in_check = false
+      elsif @player_two_in_check
+        binding.pry
+        checkmate?(player_two) ? game_over : @player_two_in_check = false
+      end
 
+      check?(opponents_king_coordinates) ? print_check_message : nil # improve upon this by limtiing the next players move to only moves are a king and out of check.
       @chess.reset_variables
       set_turn
     end
-    game_over # write this
   end
 
   def introduction
@@ -90,25 +96,24 @@ class Game
     end
     name.upcase
   end
-
-  def checkmate?  ### Error when king appears to be in checkmate? but the king could take the opponenents peice to move out of it. 
+  
+  # checks to see if for each possible move of the king, will there be an opponent piece that can take
+  def checkmate?(player)
     in_check = 0
     # king = @chess.board[8 - @chess.finish_coordinates[1]][@chess.finish_coordinates[0] - 1]
     king = nil
     @chess.board.each do |row|
       row.each do |square|
-        next if square == '' || square.which_player == whos_turn
+        next if square == '' || square.which_player != player
         square.type == 'King' ? king = square : next
       end
     end
-    binding.pry
     possible_moves = king.possible_moves(@chess.finish_coordinates)
     moves = possible_moves.each.filter { |x| ((x[0].positive? && x[0] < 9) && (x[1].positive? && x[1] < 9)) }
     moves = moves.filter do |move|
       @chess.start_coordinates = move
       king.valid_move?(@chess, whos_turn)
     end
-    moves.each { |a| check?(a) ? (in_check += 1) : nil } 
     in_check == moves.length ? true : false
   end
 
@@ -125,6 +130,7 @@ class Game
         end
       end
     end
+    check ? (whos_turn == @player_one ? @player_one_in_check = true : @player_two_in_check = true) : nil
     check
   end
 
