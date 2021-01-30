@@ -4,7 +4,7 @@ require_relative 'errors'
 
 # Controls the gameplay
 class Game
-  
+
   def initialize(player1, player2, board_class = Board.new(player1, player2))
     @chess = board_class
     @player_one = player1
@@ -20,18 +20,26 @@ class Game
       puts "#{whos_turn.data[:name]}'s go!"
       @chess.board_pretty_print
       valid_move
-      if @player_one_in_check
-        binding.pry
-        checkmate?(player_one) ? game_over : @player_one_in_check = false
-      elsif @player_two_in_check
-        binding.pry
-        checkmate?(player_two) ? game_over : @player_two_in_check = false
-      end
-
+      check_for_winner
       check?(opponents_king_coordinates) ? print_check_message : nil # improve upon this by limtiing the next players move to only moves are a king and out of check.
       @chess.reset_variables
       set_turn
     end
+  end
+
+  def check_for_winner
+    if @player_one_in_check
+      binding.pry 
+      check?(opponents_king_coordinates) ? game_over(@player_two, @player_one) : @player_one_in_check = false
+    elsif @player_two_in_check
+      binding.pry
+      check?(opponents_king_coordinates) ? game_over(@player_one, @player_two) : @player_two_in_check = false
+    end
+  end
+
+  def game_over(winner, loser)
+    puts "#{winner.data[:name]} wins! Better luck next time #{loser.data[:name]}"
+    exit
   end
 
   def introduction
@@ -76,15 +84,15 @@ class Game
   end
 
   def who_plays_first
-    # sleep 2
+    sleep 1.5
     puts "Computer will randomly select the first player..."
-    # sleep 2
+    sleep 1.5
     puts "Building random selection machine"
-    # sleep 2
+    sleep 1.5
     puts 'Adding magic sauce'
-    # sleep 2
+    sleep 1.5
     puts 'Initiating start up'
-    # sleep 4
+    sleep 2
     arr = [@player_one.data[:name], @player_two.data[:name]]
     name = arr.sample
     if @player_one.data[:name] == name
@@ -95,26 +103,6 @@ class Game
       @player_one.data[:next_turn] = false
     end
     name.upcase
-  end
-  
-  # checks to see if for each possible move of the king, will there be an opponent piece that can take
-  def checkmate?(player)
-    in_check = 0
-    # king = @chess.board[8 - @chess.finish_coordinates[1]][@chess.finish_coordinates[0] - 1]
-    king = nil
-    @chess.board.each do |row|
-      row.each do |square|
-        next if square == '' || square.which_player != player
-        square.type == 'King' ? king = square : next
-      end
-    end
-    possible_moves = king.possible_moves(@chess.finish_coordinates)
-    moves = possible_moves.each.filter { |x| ((x[0].positive? && x[0] < 9) && (x[1].positive? && x[1] < 9)) }
-    moves = moves.filter do |move|
-      @chess.start_coordinates = move
-      king.valid_move?(@chess, whos_turn)
-    end
-    in_check == moves.length ? true : false
   end
 
   def check?(king_coordinates)
@@ -146,6 +134,22 @@ class Game
         end
       end
     end
+  end
+
+
+  def current_players_king_coordinates
+    @chess.board.each do |array|
+      array.each do |square|
+        next if square == '' || square.which_player != whos_turn
+
+        if square.type == 'King' && square.which_player == whos_turn
+          row = @chess.board.detect{ |aa| aa.include?(square) }
+          @chess.finish_coordinates = [row.index(square) + 1, 8 - @chess.board.index(row)]
+          @chess.finish_square = square
+        end
+      end
+    end
+    @chess.finish_coordinates
   end
 
   def print_check_message

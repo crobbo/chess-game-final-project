@@ -6,8 +6,8 @@ require_relative '../lib/board'
 
 
 describe Game do
-  let(:player_one) { instance_double(Player) }
-  let(:player_two) { instance_double(Player) }
+  let(:player_one) { instance_double(Player, data: {name: 'Amy'}) }
+  let(:player_two) { instance_double(Player, data: {name: 'Christian'}) }
 
   let(:rook) { instance_double(Rook, which_player: player_one, type: 'Rook') }
   let(:bishop) { instance_double(Bishop, which_player: player_one, type: 'Bishop') }
@@ -146,16 +146,17 @@ describe Game do
         ['', '', '', '', '', '', '', ''],
         ['', '', '', '', '', '', '', ''],
         ['', '', '', '', '', '', '', ''],
-        ['', '', '', '', '', '', '', ''],
-        ['', '', pawn2, queen1, pawn1, '', '', ''],
-        ['', '', bishop2, king, queen2, '', '', '']
+        ['', '', '', queen1, '', '', '', ''],
+        ['', '', pawn2, bishop2, pawn1, '', '', ''],
+        ['', '', '', king, queen2, '', '', '']
       ], start_coordinates: [], finish_coordinates: [4, 2], start_square: nil, finish_square: nil) }
 
       before do
         allow(game_checkmate).to receive(:whos_turn).and_return(player_one)
         allow(board_class).to receive(:start_coordinates=)
+        allow(board_class).to receive(:finish_coordinates=)
         allow(queen1).to receive(:valid_move?).and_return(false)
-        allow(king).to receive(:valid_move?).and_return(false, true, false, false, false)
+        allow(king).to receive(:valid_move?).and_return(false, false, false, true, false)
         allow(king).to receive(:possible_moves).and_return([[5, 1], [4, 2], [3, 2], [3, 1], [3, 0], [4, 0], [5, 0], [5, 1]])
         # allow(king).to receive(:possible_moves).and_return([[5, 2], [4, 3], [3, 1], [3, 1], [3, 0], [4, 0], [5, 0], [5, 1]])
         allow(board_class).to receive(:start_square=)
@@ -163,9 +164,40 @@ describe Game do
       end
 
       it 'returns false' do
-        expect(game_checkmate.checkmate?).to eq(false)
+        expect(game_checkmate.checkmate?(player_two)).to eq(false)
       end
     end
 
   end
+
+  describe 'check_for_winner' do
+    subject(:game_over) { described_class.new(player_one, player_two, board_class) }
+
+    context "When King is in check but player can block offensive piece" do
+      let(:board_class) { instance_double(Board, board: [
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', queen1, '', '', '', ''],
+        ['', '', pawn2, bishop2, pawn1, '', '', ''],
+        ['', '', '', king, queen2, '', '', '']
+      ], start_coordinates: [], finish_coordinates: [4, 1], start_square: nil, finish_square: nil) }
+
+
+      before do
+        allow(game_over).to receive(:checkmate?).and_return(true)
+        allow(game_over).to receive(:game_over).and_return('Amy wins! Better luck next time Christian')
+        game_over.instance_variable_set("@player_two_in_check", true)
+      end
+
+      it 'returns correct end of game message' do
+        expect(game_over.check_for_winner).to eq('Amy wins! Better luck next time Christian')
+        # expect(game_over.current_players_king_coordinates).to eq([4, 1])
+      end
+    end
+  end
+
 end
+true
