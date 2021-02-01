@@ -253,9 +253,9 @@ class Queen < Piece
 
   def unicode
     if self.which_player.data[:number] == 1
-      "\u265B"
+      "\u265B".green
     else
-      "\u2655"
+      "\u2655".blue
     end
   end
 
