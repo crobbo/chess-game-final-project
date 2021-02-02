@@ -17,11 +17,14 @@ class Game
   def play
     introduction
     loop do
-      puts "#{whos_turn.data[:name]}'s go!"
+      "\n"
+      binding.pry
+      puts whos_turn.data[:number] == 1 ? "\n #{whos_turn.data[:name]}'s go! Move the " + "green".green + " peices." : "\n #{whos_turn.data[:name]}'s go! Move the " + "blue".blue + " peices."
       @chess.board_pretty_print
       valid_move
       check_for_winner
       check?(opponents_king_coordinates) ? print_check_message : nil # improve upon this by limtiing the next players move to only moves are a king and out of check.
+      @chess.pawn_reached_end? ? @chess.reintroduce_piece ? nil
       @chess.reset_variables
       set_turn
     end
@@ -84,15 +87,15 @@ class Game
   end
 
   def who_plays_first
-    # sleep 1.5
+    sleep 1.5
     puts "Computer will randomly select the first player..."
-    # sleep 1.5
+    sleep 1.5
     puts "Building random selection machine"
-    # sleep 1.5
+    sleep 1.5
     puts 'Adding magic sauce'
-    # sleep 1.5
+    sleep 1.5
     puts 'Initiating start up'
-    # sleep 2
+    sleep 2
     arr = [@player_one.data[:name], @player_two.data[:name]]
     name = arr.sample
     if @player_one.data[:name] == name

@@ -119,4 +119,41 @@ class Board
     @finish_coordinates = []
   end
 
+  def reintroduce_piece(peice_to_swap, player)
+  ## IF opponennts pawn gets to end of the board, then allow player to selecte piece from graveyard to reintroduce
+    player.graveyard.each do |piece| 
+      num = 1
+      puts "#{num}." + " #{piece.type}"
+      num += 1
+    end
+    puts "#{player.data[:name]} choose a piece to swap your Pawn with."
+    piece_to_swap = player.graveyard[user_input - 1]
+    initiate_swap(pawn, piece_to_swap)
+  end
+
+  def initiate_swap(pawn, piece_to_swap)
+    @board[8 - pawn[1]][pawn[0] - 1] = piece_to_swap
+  end
+  
+  def pawn_reached_end?(player)
+    player.data[:number] == 1 ? reintroduce_piece(player_one_end(player), player) : reintroduce_piece(player_two_end(player), player)
+  end
+
+  def player_one_end(player)
+    end_row = @board[7]
+    end_row.each do |piece|
+      next if piece_== ""
+
+      piece.type = "Pawn" ? [end_row.index(piece), 1] : nil
+    end
+  end
+
+  def player_two_end
+    end_row = @board[0]
+    end_row.each do |piece|
+      next if piece_== ""
+
+      piece.type = "Pawn" ? [end_row.index(piece), 1] : nil
+    end
+  end
 end
