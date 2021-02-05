@@ -24,7 +24,7 @@ class Game
       valid_move
       check_for_winner
       check?(opponents_king_coordinates) ? print_check_message : nil # improve upon this by limtiing the next players move to only moves are a king and out of check.
-      @chess.pawn_reached_end? ? @chess.reintroduce_piece ? nil
+      @chess.check_for_end_pawn(whos_turn)
       @chess.reset_variables
       set_turn
     end

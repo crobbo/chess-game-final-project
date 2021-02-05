@@ -119,41 +119,43 @@ class Board
     @finish_coordinates = []
   end
 
-  def reintroduce_piece(peice_to_swap, player)
-  ## IF opponennts pawn gets to end of the board, then allow player to selecte piece from graveyard to reintroduce
-    player.graveyard.each do |piece| 
-      num = 1
-      puts "#{num}." + " #{piece.type}"
-      num += 1
+  def check_for_end_pawn(player)
+    if player.graveyard.length.positive?
+      player.data[:number] == 1 ? reintroduce_piece(find_end_pawn(player), player) : reintroduce_piece(player_two_end(player), player)
     end
+  end
+
+  def find_end_pawn(player)
+    end_row = player.data[:number] == 1 ? @board[7] : @board[0]
+    num = player.data[:number] == 1 ? 1 : 8
+    end_row.each do |piece|
+      next if piece == "" || piece.which_player != player
+
+      return piece.type == "Pawn" ? [end_row.index(piece) + 1, num] : nil
+    end
+  end
+
+  def reintroduce_piece(pawn, player)
+    print_piece_options(player)
     puts "#{player.data[:name]} choose a piece to swap your Pawn with."
     piece_to_swap = player.graveyard[user_input - 1]
     initiate_swap(pawn, piece_to_swap)
   end
 
+  def print_piece_options(player)
+    player.graveyard.each do |piece| 
+      num = 1
+      puts "#{num}." + " #{piece.type}"
+      num += 1
+    end
+  end
+
   def initiate_swap(pawn, piece_to_swap)
+    player = piece_to_swap.which_player 
+    move_pawn = @board[8 - pawn[1]][pawn[0] - 1]
+    player.graveyard << move_pawn
     @board[8 - pawn[1]][pawn[0] - 1] = piece_to_swap
+    player.graveyard.delete(piece_to_swap)
   end
   
-  def pawn_reached_end?(player)
-    player.data[:number] == 1 ? reintroduce_piece(player_one_end(player), player) : reintroduce_piece(player_two_end(player), player)
-  end
-
-  def player_one_end(player)
-    end_row = @board[7]
-    end_row.each do |piece|
-      next if piece_== ""
-
-      piece.type = "Pawn" ? [end_row.index(piece), 1] : nil
-    end
-  end
-
-  def player_two_end
-    end_row = @board[0]
-    end_row.each do |piece|
-      next if piece_== ""
-
-      piece.type = "Pawn" ? [end_row.index(piece), 1] : nil
-    end
-  end
 end
