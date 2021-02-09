@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 require_relative 'board'
 require_relative 'errors'
+require_relative 'save_load'
 
 # Controls the gameplay
 class Game
@@ -12,19 +13,38 @@ class Game
     @error = Errors.new
     @player_one_in_check = false
     @player_two_in_check = false
+    @save_game_variables = []
+    @save_game = Save_load.new
+  end
+
+  def store_save_variables
+    @save_game_variables = [@chess, @player_one, @player_two, @player_one_in_check, @player_two_in_check]  
+  end
+
+  def set_variables_after_load(array)
+    return nil if array == nil
+    @chess = array[0]
+    @player_one = array[1]
+    @player_two = array[2]
+    @player_once_in_check = array[3]
+    @player_two_in_check = array[4]
+  end
+
+  def loaded
+    puts 'Game loaded'
+    @chess.reset_variables
   end
 
   def play
-    introduction
+    set_variables_after_load(@save_game.ask_for_load) == nil ? introduction : loaded
     loop do
       "\n"
-      binding.pry
       puts whos_turn.data[:number] == 1 ? "\n #{whos_turn.data[:name]}'s go! Move the " + "green".green + " peices." : "\n #{whos_turn.data[:name]}'s go! Move the " + "blue".blue + " peices."
       @chess.board_pretty_print
       valid_move
       check_for_winner
       check?(opponents_king_coordinates) ? print_check_message : nil # improve upon this by limtiing the next players move to only moves are a king and out of check.
-      @chess.check_for_end_pawn(whos_turn)
+      @chess.check_for_end_pawn(whos_turn, return_opponent)
       @chess.reset_variables
       set_turn
     end
@@ -64,16 +84,18 @@ class Game
 
   def move_piece
     @chess.choose_coordinates
+    @chess.start_square == "SAVE" || @chess.finish_square == "SAVE" ? @save_game.save(@save_game_variables) : nil
     return false if @chess.board[8 - @chess.start_coordinates[1]][@chess.start_coordinates[0] - 1] == ''
     return false unless @chess.start_square.which_player == whos_turn  # checks player is moving piece which belongs to them
     return false unless @chess.start_square.valid_move?(@chess, whos_turn)
 
-    whos_turn.add_to_graveyard(@chess, @chess.board)
     pawn_fist_move?
     adjust_board
   end
 
   def adjust_board
+    finish_piece = @chess.board[8 - @chess.finish_coordinates[1]][@chess.finish_coordinates[0] - 1]
+    finish_piece == '' ? nil : return_opponent.add_to_graveyard(finish_piece)
     @chess.board[8 - @chess.finish_coordinates[1]][@chess.finish_coordinates[0] - 1] = @chess.start_square
     @chess.board[8 - @chess.start_coordinates[1]][@chess.start_coordinates[0] - 1] = ''
   end
@@ -172,6 +194,10 @@ class Game
 
   def whos_turn
     @player_one.data[:next_turn] ? @player_one : @player_two
+  end
+
+  def return_opponent
+    @player_one.data[:next_turn] ? @player_two : @player_one 
   end
 
   def continue

@@ -84,8 +84,10 @@ class Board
   def obtain_start_square
     puts 'Enter X coordinate:'
     x = user_input
+    x.positive? ? nil : ( x.downcase == 'save' ? "SAVE" : nil)   
     puts 'Enter Y coordinate:'
     y = user_input
+    y.positive? ? nil : (y.downcase == 'save' ? "SAVE" : nil)
     @start_coordinates << x
     @start_coordinates << y
     @board[8-y][x-1]
@@ -94,8 +96,10 @@ class Board
   def obtain_finish_square
     puts 'Enter X coordinate:'
     x = user_input
+    x.positive? ? nil : ( x.downcase == 'save' ? "SAVE" : nil)   
     puts 'Enter Y coordinate:'
     y = user_input
+    y.positive? ? nil : (y.downcase == 'save' ? "SAVE" : nil)
     @finish_coordinates << (x)
     @finish_coordinates << (y)
     @board[8-y][x-1]
@@ -119,23 +123,32 @@ class Board
     @finish_coordinates = []
   end
 
-  def check_for_end_pawn(player)
-    if player.graveyard.length.positive?
-      player.data[:number] == 1 ? reintroduce_piece(find_end_pawn(player), player) : reintroduce_piece(player_two_end(player), player)
-    end
+  def check_for_end_pawn(player, opponent)
+    binding.pry
+    # if player.graveyard.length.positive?
+      reintroduce_piece(find_end_pawn(player), player)
+    # end
   end
 
   def find_end_pawn(player)
     end_row = player.data[:number] == 1 ? @board[7] : @board[0]
     num = player.data[:number] == 1 ? 1 : 8
+    coordinates = []
     end_row.each do |piece|
+      # binding.pry
       next if piece == "" || piece.which_player != player
 
-      return piece.type == "Pawn" ? [end_row.index(piece) + 1, num] : nil
+      if piece.type == "Pawn" && piece.which_player == player 
+        coordinates << [end_row.index(piece) + 1, num]
+      end
     end
+    binding.pry
+    coordinates.empty? ? nil : coordinates
   end
 
   def reintroduce_piece(pawn, player)
+    return nil if pawn == nil
+
     print_piece_options(player)
     puts "#{player.data[:name]} choose a piece to swap your Pawn with."
     piece_to_swap = player.graveyard[user_input - 1]
