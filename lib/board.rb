@@ -13,8 +13,7 @@ require 'colorize'
 require_relative 'player'
 
 class Board
-  attr_reader :board
-  attr_accessor :start_coordinates, :finish_coordinates, :start_square, :finish_square
+  attr_accessor :board, :start_coordinates, :finish_coordinates, :start_square, :finish_square, :player1, :player2
 
   def initialize(player1, player2)
     @player1 = player1

@@ -8,7 +8,7 @@ class Save_load
 
   def save(save_game_variables)
     save_object = {
-      chess: save_game_variables[0],
+      board: save_game_variables[0],
       player_one: save_game_variables[1],
       player_two: save_game_variables[2],
       player_one_in_check: save_game_variables[3],
@@ -22,12 +22,12 @@ class Save_load
   def load(choice)
     file_to_load = Dir.chdir("save_files") { Dir.glob("*.yaml").sort[choice] }
     loaded_game = YAML.load(File.read("save_files/#{file_to_load}"), [Symbol])
-    chess = loaded_game[:chess]
+    board = loaded_game[:board],
     player_one = loaded_game[:player_one],
     player_two = loaded_game[:player_two],
     player_one_in_check = loaded_game[:player_once_in_check],
     player_two_in_check = loaded_game[:player_two_in_check]
-    return variables = [chess, player_one, player_two, player_one_in_check, player_two_in_check]
+    return variables = [board, player_one, player_two, player_one_in_check, player_two_in_check]
   end
 
   def ask_for_load
