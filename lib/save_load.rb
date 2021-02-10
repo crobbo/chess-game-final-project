@@ -1,6 +1,8 @@
+require 'yaml'
+
 class Save_load 
 
-  def initialize 
+  def initialize
     @file_name = create_unique_file_name
   end
 

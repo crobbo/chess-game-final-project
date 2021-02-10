@@ -77,17 +77,23 @@ class Board
   def choose_coordinates
     puts 'Select piece to move:'.light_blue
     @start_square = obtain_start_square
+    return nil if @start_square == 'SAVE'
+
     puts 'Select square to move to:'.light_blue
     @finish_square = obtain_finish_square
+    return nil if @finish_square == 'SAVE'
+
   end
 
   def obtain_start_square
     puts 'Enter X coordinate:'
     x = user_input
-    x.positive? ? nil : ( x.downcase == 'save' ? "SAVE" : nil)   
+    return 'SAVE' if x == 'SAVE'
+
     puts 'Enter Y coordinate:'
     y = user_input
-    y.positive? ? nil : (y.downcase == 'save' ? "SAVE" : nil)
+    return 'SAVE' if y == 'SAVE'
+
     @start_coordinates << x
     @start_coordinates << y
     @board[8-y][x-1]
@@ -96,21 +102,25 @@ class Board
   def obtain_finish_square
     puts 'Enter X coordinate:'
     x = user_input
-    x.positive? ? nil : ( x.downcase == 'save' ? "SAVE" : nil)   
+    return 'SAVE' if x == 'SAVE'
+
     puts 'Enter Y coordinate:'
     y = user_input
-    y.positive? ? nil : (y.downcase == 'save' ? "SAVE" : nil)
+    return 'SAVE' if y == 'SAVE'
+
     @finish_coordinates << (x)
     @finish_coordinates << (y)
     @board[8-y][x-1]
   end
 
   def user_input
-    num = Integer(gets)
-    if num.positive? && num < 9
-      num
+    num = gets.chomp
+    if num.upcase == 'SAVE'
+      num.upcase
+    elsif num.to_i.positive? && num.to_i < 9
+      num.to_i
     else
-      puts "Incorrect input, try again"
+      puts 'Incorrect input, try again'
       user_input
     end
   end
@@ -124,10 +134,7 @@ class Board
   end
 
   def check_for_end_pawn(player, opponent)
-    binding.pry
-    # if player.graveyard.length.positive?
-      reintroduce_piece(find_end_pawn(player), player)
-    # end
+    reintroduce_piece(find_end_pawn(player), player)
   end
 
   def find_end_pawn(player)
@@ -135,14 +142,12 @@ class Board
     num = player.data[:number] == 1 ? 1 : 8
     coordinates = []
     end_row.each do |piece|
-      # binding.pry
       next if piece == "" || piece.which_player != player
 
       if piece.type == "Pawn" && piece.which_player == player 
         coordinates << [end_row.index(piece) + 1, num]
       end
     end
-    binding.pry
     coordinates.empty? ? nil : coordinates
   end
 

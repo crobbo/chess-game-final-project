@@ -84,6 +84,8 @@ class Game
 
   def move_piece
     @chess.choose_coordinates
+    store_save_variables
+    binding.pry
     @chess.start_square == "SAVE" || @chess.finish_square == "SAVE" ? @save_game.save(@save_game_variables) : nil
     return false if @chess.board[8 - @chess.start_coordinates[1]][@chess.start_coordinates[0] - 1] == ''
     return false unless @chess.start_square.which_player == whos_turn  # checks player is moving piece which belongs to them
