@@ -1,6 +1,6 @@
 # Chess
 
-Write a description here:
+A final project completed as part of the The Odin Projects Ruby Course.
 
 Features: 
 - Block illegal moves
@@ -9,7 +9,6 @@ Features:
 - Board remains fixed just the pieces update in the command line
 - Declare check or checkmate
 - Save/load
-- Computer AI opponent
 
 ## How To Play
 
@@ -40,5 +39,5 @@ Features:
 
 ### Improvements 
 
-* Integrate cunputer AI
+* Integrate computer AI
 * Improve UI of gameplay / board
