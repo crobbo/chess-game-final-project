@@ -53,9 +53,9 @@ class King < Piece
 
   def unicode
     if self.which_player.data[:number] == 1
-      "\u265A".green
+      "\u265A"
     else
-      "\u2654".blue
+      "\u2654"
     end
   end
 end

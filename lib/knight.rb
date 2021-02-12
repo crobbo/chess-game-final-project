@@ -48,9 +48,9 @@ class Knight < Piece
 
   def unicode
     if self.which_player.data[:number] == 1
-      "\u265E".green
+      "\u265E"
     else
-      "\u2658".blue
+      "\u2658"
     end
   end
 end

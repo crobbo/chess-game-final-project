@@ -110,15 +110,15 @@ class Game
   end
 
   def who_plays_first
-    sleep 1.5
+    # sleep 1.5
     puts "Computer will randomly select the first player..."
-    sleep 1.5
+    # sleep 1.5
     puts "Building random selection machine"
-    sleep 1.5
+    # sleep 1.5
     puts 'Adding magic sauce'
-    sleep 1.5
+    # sleep 1.5
     puts 'Initiating start up'
-    sleep 2
+    # sleep 2
     arr = [@player_one.data[:name], @player_two.data[:name]]
     name = arr.sample
     if @player_one.data[:name] == name

@@ -112,9 +112,9 @@ class Rook < Piece
 
   def unicode
     if self.which_player.data[:number] == 1
-      "\u265C".green
+      "\u265C"
     else
-      "\u2656".blue
+      "\u2656"
     end
   end
 end
