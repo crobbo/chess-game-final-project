@@ -85,55 +85,80 @@ class Board
   end
 
   def choose_coordinates
-    puts 'Select piece to move:'.light_blue
-    @start_square = obtain_start_square
-    return nil if @start_square == 'SAVE'
-
-    puts 'Select square to move to:'.light_blue
-    @finish_square = obtain_finish_square
-    return nil if @finish_square == 'SAVE'
-
-  end
-
-  def obtain_start_square
-    puts 'Enter X coordinate:'
-    x = user_input
-    return 'SAVE' if x == 'SAVE'
-
-    puts 'Enter Y coordinate:'
-    y = user_input
-    return 'SAVE' if y == 'SAVE'
-
-    @start_coordinates << x
-    @start_coordinates << y
-    @board[8-y][x-1]
-  end
-
-  def obtain_finish_square
-    puts 'Enter X coordinate:'
-    x = user_input
-    return 'SAVE' if x == 'SAVE'
-
-    puts 'Enter Y coordinate:'
-    y = user_input
-    return 'SAVE' if y == 'SAVE'
-
-    @finish_coordinates << (x)
-    @finish_coordinates << (y)
-    @board[8-y][x-1]
+    user_input
   end
 
   def user_input
-    num = gets.chomp
-    if num.upcase == 'SAVE'
-      num.upcase
-    elsif num.to_i.positive? && num.to_i < 9
-      num.to_i
-    else
-      puts 'Incorrect input, try again'
-      user_input
-    end
+    input = gets.chomp
+    convert_to_numbers(input)
   end
+
+  def convert_to_numbers(string)
+    numbers = { a: 1, b: 2, c: 3, d: 4, e: 5, f: 6, g: 7, h: 8}
+    string_split = string.split(//)
+    @start_coordinates = [numbers[string_split[0].to_sym], string_split[1].to_i]
+    @finish_coordinates = [numbers[string_split[2].to_sym], string_split[3].to_i]
+    set_start_finish_squares(@start_coordinates, @finish_coordinates)
+  end
+
+  def set_start_finish_squares(start, finish)
+    @start_square = @board[8- @start_coordinates[1]][@start_coordinates[0] - 1]
+    @finish_square = @board[8- @finish_coordinates[1]][@finish_coordinates[0]- 1]
+    binding.pry
+  end
+
+  # def choose_coordinates
+  #   puts 'Select piece to move:'.light_blue
+  #   @start_square = obtain_start_square
+  #   return nil if @start_square == 'SAVE'
+
+  #   puts 'Select square to move to:'.light_blue
+  #   @finish_square = obtain_finish_square
+  #   return nil if @finish_square == 'SAVE'
+
+  # end
+
+  # def obtain_start_square
+  #   puts 'Enter X coordinate:'
+  #   x = user_input
+  #   return 'SAVE' if x == 'SAVE'
+
+  #   puts 'Enter Y coordinate:'
+  #   y = user_input
+  #   return 'SAVE' if y == 'SAVE'
+
+  #   @start_coordinates << x
+  #   @start_coordinates << y
+  #   @board[8-y][x-1]
+  # end
+
+  # def obtain_finish_square
+  #   puts 'Enter X coordinate:'
+  #   x = user_input
+  #   return 'SAVE' if x == 'SAVE'
+
+  #   puts 'Enter Y coordinate:'
+  #   y = user_input
+  #   return 'SAVE' if y == 'SAVE'
+
+  #   @finish_coordinates << (x)
+  #   @finish_coordinates << (y)
+  #   @board[8-y][x-1]
+  # end
+
+  # def user_input
+  #   num = gets.chomp
+  #   if num.upcase == 'SAVE'
+  #     num.upcase
+  #   elsif num.to_i.positive? && num.to_i < 9
+  #     num.to_i
+  #   else
+  #     puts 'Incorrect input, try again'
+  #     user_input
+  #   end
+  # end
+
+
   
 
   def reset_variables
