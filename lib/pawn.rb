@@ -115,7 +115,7 @@ class Pawn < Piece
 
   def unicode
     if self.which_player.data[:number] == 1
-      "\e[37m\u265F"
+      "\x1b[92m\u265F"
     else
       "\x1b[30m\u265F"
     end

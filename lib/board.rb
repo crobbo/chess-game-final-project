@@ -14,11 +14,13 @@ require_relative 'player'
 
 class Board
   attr_accessor :board, :start_coordinates, :finish_coordinates, :start_square, :finish_square, :player1, :player2
+  attr_reader :save_value
 
   def initialize(player1, player2)
     @player1 = player1
     @player2 = player2
 
+    @save_value = false
     @start_square = nil
     @finish_square = nil
     @start_coordinates = []
@@ -39,6 +41,8 @@ class Board
   def board_pretty_print
     last_color_brown = false
     string = ''
+    number = 1
+    puts "\e[36m        a  b  c  d  e  f  g  h \e[0m"
     board.each_with_index do |array, index|
       last_color_brown = last_color_brown == false ? true : false
       array.each do |item|
@@ -64,11 +68,11 @@ class Board
           end
         end
       end
-      # if index.positive?
-        print "#{string}\n"
+        print "     #{number} #{string} #{number}\n"
         string = ''
-      # end
+        number += 1
     end
+    puts "\e[36m        a  b  c  d  e  f  g  h \e[0m"
   end
   
   def place_pieces
@@ -89,12 +93,26 @@ class Board
   end
 
   def user_input
+    puts "Enter start square & finish square (Example: a1a1):"
     input = gets.chomp
-    convert_to_numbers(input)
+    if check_input(input) == false
+      invalid_input
+      return nil
+    end
+    input.upcase == 'SAVE' ? @save_value = true : convert_to_numbers(input)
+  end
+
+  def check_input(string)
+    string.length != 4 ? false : true
+  end
+
+  def invalid_input
+    puts "Invalid input. Try again:"
+    user_input
   end
 
   def convert_to_numbers(string)
-    numbers = { a: 1, b: 2, c: 3, d: 4, e: 5, f: 6, g: 7, h: 8}
+    numbers = { a: 1, b: 2, c: 3, d: 4, e: 5, f: 6, g: 7, h: 8 }
     string_split = string.split(//)
     @start_coordinates = [numbers[string_split[0].to_sym], string_split[1].to_i]
     @finish_coordinates = [numbers[string_split[2].to_sym], string_split[3].to_i]
@@ -104,7 +122,6 @@ class Board
   def set_start_finish_squares(start, finish)
     @start_square = @board[8- @start_coordinates[1]][@start_coordinates[0] - 1]
     @finish_square = @board[8- @finish_coordinates[1]][@finish_coordinates[0]- 1]
-    binding.pry
   end
 
   # def choose_coordinates

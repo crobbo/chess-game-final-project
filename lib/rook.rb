@@ -112,9 +112,9 @@ class Rook < Piece
 
   def unicode
     if self.which_player.data[:number] == 1
-      "\u265C"
+      "\e[92m\u265C"
     else
-      "\u2656"
+      "\e[30m\u265C"
     end
   end
 end

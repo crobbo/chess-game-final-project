@@ -53,9 +53,9 @@ class King < Piece
 
   def unicode
     if self.which_player.data[:number] == 1
-      "\u265A"
+      "\e[92m\u265A"
     else
-      "\u2654"
+      "\e[30m\u265A"
     end
   end
 end

@@ -41,7 +41,7 @@ class Game
     set_variables_after_load(@save_game.ask_for_load) == nil ? introduction : loaded
     loop do
       "\n"
-      puts whos_turn.data[:number] == 1 ? "\n #{whos_turn.data[:name]}'s go! Move the " + "green".green + " peices." : "\n #{whos_turn.data[:name]}'s go! Move the " + "blue".blue + " peices."
+      puts whos_turn.data[:number] == 1 ? "\n#{whos_turn.data[:name]}'s go! Move the " + "\e[92mgreen\e[0m" + " peices." : "\n #{whos_turn.data[:name]}'s go! Move the " + "\e[30mblack\e[0m" + " peices. \n"
       @chess.board_pretty_print
       valid_move
       check_for_winner
@@ -85,7 +85,7 @@ class Game
   def move_piece
     @chess.choose_coordinates
     store_save_variables
-    @chess.start_square == "SAVE" || @chess.finish_square == "SAVE" ? @save_game.save(@save_game_variables) : nil
+    @chess.save_value ? @save_game.save(@save_game_variables) : nil
     return false if @chess.board[8 - @chess.start_coordinates[1]][@chess.start_coordinates[0] - 1] == ''
     return false unless @chess.start_square.which_player == whos_turn  # checks player is moving piece which belongs to them
     return false unless @chess.start_square.valid_move?(@chess, whos_turn)

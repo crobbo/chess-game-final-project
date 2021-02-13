@@ -163,9 +163,9 @@ class Bishop < Piece
 
   def unicode
     if self.which_player.data[:number] == 1
-      "\u265D"
+      "\e[92m\u265D"
     else
-      "\u2657"
+      "\e[30m\u265D"
     end
   end
 end
