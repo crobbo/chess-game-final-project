@@ -38,10 +38,12 @@ class Board
     ]
   end
 
-  def board_pretty_print
+  def board_pretty_print(player)
+    system 'clear'
+    print_player_message(player)
     last_color_brown = false
     string = ''
-    number = 1
+    number = 8
     puts "\e[36m        a  b  c  d  e  f  g  h \e[0m"
     board.each_with_index do |array, index|
       last_color_brown = last_color_brown == false ? true : false
@@ -70,7 +72,7 @@ class Board
       end
         print "     #{number} #{string} #{number}\n"
         string = ''
-        number += 1
+        number -= 1
     end
     puts "\e[36m        a  b  c  d  e  f  g  h \e[0m"
   end
@@ -93,7 +95,7 @@ class Board
   end
 
   def user_input
-    puts "Enter start square & finish square (Example: a1a1):"
+    puts "\n Enter start square & finish square (Example: a1a1):"
     input = gets.chomp
     if check_input(input) == false
       invalid_input
@@ -123,60 +125,6 @@ class Board
     @start_square = @board[8- @start_coordinates[1]][@start_coordinates[0] - 1]
     @finish_square = @board[8- @finish_coordinates[1]][@finish_coordinates[0]- 1]
   end
-
-  # def choose_coordinates
-  #   puts 'Select piece to move:'.light_blue
-  #   @start_square = obtain_start_square
-  #   return nil if @start_square == 'SAVE'
-
-  #   puts 'Select square to move to:'.light_blue
-  #   @finish_square = obtain_finish_square
-  #   return nil if @finish_square == 'SAVE'
-
-  # end
-
-  # def obtain_start_square
-  #   puts 'Enter X coordinate:'
-  #   x = user_input
-  #   return 'SAVE' if x == 'SAVE'
-
-  #   puts 'Enter Y coordinate:'
-  #   y = user_input
-  #   return 'SAVE' if y == 'SAVE'
-
-  #   @start_coordinates << x
-  #   @start_coordinates << y
-  #   @board[8-y][x-1]
-  # end
-
-  # def obtain_finish_square
-  #   puts 'Enter X coordinate:'
-  #   x = user_input
-  #   return 'SAVE' if x == 'SAVE'
-
-  #   puts 'Enter Y coordinate:'
-  #   y = user_input
-  #   return 'SAVE' if y == 'SAVE'
-
-  #   @finish_coordinates << (x)
-  #   @finish_coordinates << (y)
-  #   @board[8-y][x-1]
-  # end
-
-  # def user_input
-  #   num = gets.chomp
-  #   if num.upcase == 'SAVE'
-  #     num.upcase
-  #   elsif num.to_i.positive? && num.to_i < 9
-  #     num.to_i
-  #   else
-  #     puts 'Incorrect input, try again'
-  #     user_input
-  #   end
-  # end
-
-
-  
 
   def reset_variables
     @start_square = nil
@@ -226,6 +174,11 @@ class Board
     player.graveyard << move_pawn
     @board[8 - pawn[1]][pawn[0] - 1] = piece_to_swap
     player.graveyard.delete(piece_to_swap)
+  end
+
+  def print_player_message(player)
+    puts player.data[:number] == 1 ? "\n    #{player.data[:name]}'s go! Move the " + "GREEN" + " peices." : "\n #{player.data[:name]}'s go! Move the " + "BLACK" + " peices. \n"
+    puts "\n"
   end
   
 end

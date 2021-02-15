@@ -13,15 +13,17 @@ class Rook < Piece
     @valid = true
   end
 
-  def moves
-   # Rooks can move anywhere vertically or horizontally
-  end
+  # def moves
+  #  # Rooks can move anywhere vertically or horizontally
+  # end
 
   def valid_move?(chess, player)
     return false unless same_axis?(chess.start_coordinates, chess.finish_coordinates)
 
     squares = possible_moves(chess.start_coordinates)
+    binding.pry
     if (squares[0].include?(chess.finish_coordinates) || squares[1].include?(chess.finish_coordinates)) && (space_between_column?(chess) || space_between_row?(chess))
+    binding.pry
       if chess.finish_square == ''
         true
       elsif chess.finish_square.which_player != player
@@ -32,6 +34,7 @@ class Rook < Piece
         false
       end
     else
+    binding.pry
       false
     end
   end
@@ -48,6 +51,8 @@ class Rook < Piece
 
   def space_between_column?(chess)
     return false unless chess.start_coordinates[0] == chess.finish_coordinates[0]
+
+    return true if chess.start_coordinates[1] - chess.finish_coordinates[1] == 1 || chess.start_coordinates[1] - chess.finish_coordinates[1] == -1
 
     row = transpose_column(chess)
     row.index(chess.start_square) < row.index(chess.finish_square) ? row : row = row.reverse
@@ -67,6 +72,8 @@ class Rook < Piece
 
   def space_between_row?(chess)
     return false unless chess.start_coordinates[1] == chess.finish_coordinates[1]
+
+    return true if chess.start_coordinates[0] - chess.finish_coordinates[0] == 1 || chess.start_coordinates[0] - chess.finish_coordinates[0] == -1
 
     find_row = chess.board[8 - chess.start_coordinates[1]]
     start = chess.start_coordinates[0]

@@ -41,8 +41,7 @@ class Game
     set_variables_after_load(@save_game.ask_for_load) == nil ? introduction : loaded
     loop do
       "\n"
-      puts whos_turn.data[:number] == 1 ? "\n#{whos_turn.data[:name]}'s go! Move the " + "\e[92mgreen\e[0m" + " peices." : "\n #{whos_turn.data[:name]}'s go! Move the " + "\e[30mblack\e[0m" + " peices. \n"
-      @chess.board_pretty_print
+      @chess.board_pretty_print(whos_turn)
       valid_move
       check_for_winner
       check?(opponents_king_coordinates) ? print_check_message : nil # improve upon this by limtiing the next players move to only moves are a king and out of check.
