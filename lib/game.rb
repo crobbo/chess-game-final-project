@@ -2,6 +2,7 @@
 require_relative 'board'
 require_relative 'errors'
 require_relative 'save_load'
+require 'colorize'
 
 # Controls the gameplay
 class Game
@@ -42,6 +43,7 @@ class Game
     loop do
       "\n"
       @chess.board_pretty_print(whos_turn)
+      puts "\n Enter start square & finish square (Example: a1a1):"
       valid_move
       check_for_winner
       check?(opponents_king_coordinates) ? print_check_message : nil # improve upon this by limtiing the next players move to only moves are a king and out of check.
@@ -110,13 +112,13 @@ class Game
 
   def who_plays_first
     # sleep 1.5
-    puts "Computer will randomly select the first player..."
+    puts "Computer will randomly select the first player...".pink
     # sleep 1.5
-    puts "Building random selection machine"
+    puts "Building random selection machine".blue
     # sleep 1.5
-    puts 'Adding magic sauce'
+    puts 'Adding magic sauce'.yellow
     # sleep 1.5
-    puts 'Initiating start up'
+    puts 'Initiating start up'.green
     # sleep 2
     arr = [@player_one.data[:name], @player_two.data[:name]]
     name = arr.sample

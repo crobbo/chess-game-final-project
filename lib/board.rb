@@ -95,7 +95,6 @@ class Board
   end
 
   def user_input
-    puts "\n Enter start square & finish square (Example: a1a1):"
     input = gets.chomp
     if check_input(input) == false
       invalid_input
@@ -148,16 +147,30 @@ class Board
         coordinates << [end_row.index(piece) + 1, num]
       end
     end
-    coordinates.empty? ? nil : coordinates
+    coordinates.empty? ? nil : coordinates[0]
   end
+
+  # def reintroduce_piece(pawn, player)
+  #   return nil if pawn == nil
+
+  #   print_piece_options(player)
+  #   puts "#{player.data[:name]} choose a piece to swap your Pawn with."
+  #   piece_to_swap = player.graveyard[user_input - 1]
+  #   initiate_swap(pawn, piece_to_swap)
+  # end
 
   def reintroduce_piece(pawn, player)
     return nil if pawn == nil
 
-    print_piece_options(player)
-    puts "#{player.data[:name]} choose a piece to swap your Pawn with."
-    piece_to_swap = player.graveyard[user_input - 1]
+    puts "Choose a piece to swap your Pawn with"
+    piece_to_swap = user_input.split
+    piece_to_swap[0] = piece_to_swap[0].upcase
+    piece_to_swap = create_new_piece(piece_to_swap, player)
     initiate_swap(pawn, piece_to_swap)
+  end
+
+  def create_new_piece(piece, player)
+    Object.const_get(piece.join('')).new(player)
   end
 
   def print_piece_options(player)
@@ -169,9 +182,7 @@ class Board
   end
 
   def initiate_swap(pawn, piece_to_swap)
-    player = piece_to_swap.which_player 
-    move_pawn = @board[8 - pawn[1]][pawn[0] - 1]
-    player.graveyard << move_pawn
+    player = piece_to_swap.which_player
     @board[8 - pawn[1]][pawn[0] - 1] = piece_to_swap
     player.graveyard.delete(piece_to_swap)
   end

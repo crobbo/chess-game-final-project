@@ -91,11 +91,18 @@ describe Board do
             ['', '', '', rook_one, '', '', '', '']
             ])
         end
-
-        it 'adds pawn to graveyard array' do
-          board_swap.initiate_swap([4, 1], rook_one)
-          expect(player_two.graveyard).to eq([pawn_two, pawn_one])
-        end
       end 
     end 
+
+    describe '#create_new_piece' do
+
+      context 'When a Player chooses to reintroduce a Queen' do
+
+        subject(:board_create) { described_class.new(player_one, player_two) }
+
+          it 'creates Queen class' do
+            expect(board_create.create_new_piece(["Queen"], player_one).type).to eq('Queen') 
+          end
+      end
+    end
 end
