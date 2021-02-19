@@ -11,6 +11,7 @@ class King < Piece
     @which_player = player
     @type = 'King'
     @valid = true
+    @first_move = true
   end
 
   def moves
@@ -49,6 +50,10 @@ class King < Piece
       coordinates << arr.transpose.map(&:sum)
     end
     coordinates
+  end
+
+  def change_first_move
+    @first_move = false
   end
 
   def unicode

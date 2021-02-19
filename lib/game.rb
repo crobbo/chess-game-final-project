@@ -2,6 +2,7 @@
 require_relative 'board'
 require_relative 'errors'
 require_relative 'save_load'
+require_relative 'castling_moves'
 require 'colorize'
 
 # Controls the gameplay
@@ -16,6 +17,7 @@ class Game
     @player_two_in_check = false
     @save_game_variables = []
     @save_game = Save_load.new
+    @castle = Castling.new
   end
 
   def store_save_variables
@@ -74,6 +76,14 @@ class Game
     @player_two.ask_name
     puts "#{who_plays_first} GOES FIRST!"
   end
+  
+  def castle_move(chess, player)
+    if @castle.castle_peices(chess, player) == false
+      false
+    else
+      true
+    end
+  end
 
   def valid_move
     unless move_piece
@@ -84,7 +94,10 @@ class Game
   end
 
   def move_piece
-    @chess.choose_coordinates
+    unless @chess.choose_coordinates
+      binding.pry
+      return castle_move(@chess, whos_turn)
+    end
     store_save_variables
     @chess.save_value ? @save_game.save(@save_game_variables) : nil
     return false if @chess.board[8 - @chess.start_coordinates[1]][@chess.start_coordinates[0] - 1] == ''
@@ -111,15 +124,15 @@ class Game
   end
 
   def who_plays_first
-    # sleep 1.5
-    puts "Computer will randomly select the first player...".pink
-    # sleep 1.5
+    sleep 1.5
+    puts "Computer will randomly select the first player...".light_red
+    sleep 1.5
     puts "Building random selection machine".blue
-    # sleep 1.5
-    puts 'Adding magic sauce'.yellow
-    # sleep 1.5
+    sleep 1.5
+    puts 'Adding magic sauce'.magenta
+    sleep 1.5
     puts 'Initiating start up'.green
-    # sleep 2
+    sleep 2
     arr = [@player_one.data[:name], @player_two.data[:name]]
     name = arr.sample
     if @player_one.data[:name] == name

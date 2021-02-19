@@ -19,7 +19,6 @@ class Board
   def initialize(player1, player2)
     @player1 = player1
     @player2 = player2
-
     @save_value = false
     @start_square = nil
     @finish_square = nil
@@ -104,7 +103,9 @@ class Board
   end
 
   def check_input(string)
-    string.length != 4 ? false : true
+    return true if string.downcase == 'castle'
+
+    string.length == 4 ? true : false
   end
 
   def invalid_input
@@ -113,12 +114,14 @@ class Board
   end
 
   def convert_to_numbers(string)
+    return false if string.downcase == 'castle' 
     numbers = { a: 1, b: 2, c: 3, d: 4, e: 5, f: 6, g: 7, h: 8 }
     string_split = string.split(//)
     @start_coordinates = [numbers[string_split[0].to_sym], string_split[1].to_i]
     @finish_coordinates = [numbers[string_split[2].to_sym], string_split[3].to_i]
     set_start_finish_squares(@start_coordinates, @finish_coordinates)
   end
+
 
   def set_start_finish_squares(start, finish)
     @start_square = @board[8- @start_coordinates[1]][@start_coordinates[0] - 1]
@@ -150,15 +153,6 @@ class Board
     coordinates.empty? ? nil : coordinates[0]
   end
 
-  # def reintroduce_piece(pawn, player)
-  #   return nil if pawn == nil
-
-  #   print_piece_options(player)
-  #   puts "#{player.data[:name]} choose a piece to swap your Pawn with."
-  #   piece_to_swap = player.graveyard[user_input - 1]
-  #   initiate_swap(pawn, piece_to_swap)
-  # end
-
   def reintroduce_piece(pawn, player)
     return nil if pawn == nil
 
@@ -188,7 +182,7 @@ class Board
   end
 
   def print_player_message(player)
-    puts player.data[:number] == 1 ? "\n    #{player.data[:name]}'s go! Move the " + "GREEN" + " peices." : "\n #{player.data[:name]}'s go! Move the " + "BLACK" + " peices. \n"
+    puts player.data[:number] == 1 ? "\n    #{player.data[:name]}'s go! Move the " + "\e[92mGREEN\x1b[0m" + " peices." : "\n #{player.data[:name]}'s go! Move the " + "BLACK".light_black + " peices. \n"
     puts "\n"
   end
   

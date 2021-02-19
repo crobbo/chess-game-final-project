@@ -11,6 +11,7 @@ class Rook < Piece
     @which_player = player
     @type = 'Rook'
     @valid = true
+    @first_move = true
   end
 
   # def moves
@@ -115,6 +116,10 @@ class Rook < Piece
     end
     arr.delete(start_coordinates)
     arr
+  end
+
+  def change_first_move
+    @first_move = false
   end
 
   def unicode

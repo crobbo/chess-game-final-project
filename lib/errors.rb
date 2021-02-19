@@ -10,4 +10,8 @@ class Errors
   def wrong_piece
     puts 'TRY AGAIN, the square you chose does not contain your piece!'.light_red
   end
+
+  def invalid_castle
+    puts '    TRY AGAIN, castle move not valid!'.light_red
+  end
 end
