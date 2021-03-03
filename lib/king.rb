@@ -5,7 +5,7 @@ require 'pry'
 
 class King < Piece
 
-  attr_reader :type
+  attr_reader :type, :first_move
 
   def initialize(player)
     @which_player = player

@@ -3,7 +3,7 @@ require_relative '../lib/game'
 require_relative '../lib/player'
 require_relative '../lib/pawn'
 require_relative '../lib/board'
-require 'pry'
+
 
 describe Board do
   let(:player_one) { instance_double(Player, data: {name: 'Amy', number: 1}) }

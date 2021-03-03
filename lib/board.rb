@@ -95,9 +95,9 @@ class Board
 
   def user_input
     input = gets.chomp
-    if check_input(input) == false
+    unless check_input(input) == true
       invalid_input
-      return nil
+      user_input
     end
     input.upcase == 'SAVE' ? @save_value = true : convert_to_numbers(input)
   end
@@ -110,7 +110,6 @@ class Board
 
   def invalid_input
     puts "Invalid input. Try again:"
-    user_input
   end
 
   def convert_to_numbers(string)
@@ -155,12 +154,28 @@ class Board
 
   def reintroduce_piece(pawn, player)
     return nil if pawn == nil
-
-    puts "Choose a piece to swap your Pawn with"
-    piece_to_swap = user_input.split
+    input = get_input
+    piece_to_swap = input.split('')
     piece_to_swap[0] = piece_to_swap[0].upcase
     piece_to_swap = create_new_piece(piece_to_swap, player)
     initiate_swap(pawn, piece_to_swap)
+  end
+
+  ## method accepts first input if it is wrong. 
+
+
+  def get_input
+    input = ''
+    num = 1
+    loop do
+      break if %w[rook bishop queen knight].include?(input.downcase)
+
+      invalid_input if num > 1
+      puts 'Choose a piece to swap your Pawn with'
+      input = gets.chomp
+      num += 1
+    end
+    input
   end
 
   def create_new_piece(piece, player)

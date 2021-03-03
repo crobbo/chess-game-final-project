@@ -16,7 +16,6 @@ class Queen < Piece
 
   def valid_move?(chess, player)
     squares = possible_moves(chess) 
-
     if squares[0][0].include?(chess.finish_coordinates) && space_between_diagonals?(chess, squares[0])
       if chess.finish_square == ''
         return true

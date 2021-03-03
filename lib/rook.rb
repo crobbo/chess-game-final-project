@@ -5,7 +5,7 @@ require 'pry'
 
 class Rook < Piece
 
-  attr_reader :type
+  attr_reader :type, :first_move
 
   def initialize(player)
     @which_player = player
@@ -22,9 +22,7 @@ class Rook < Piece
     return false unless same_axis?(chess.start_coordinates, chess.finish_coordinates)
 
     squares = possible_moves(chess.start_coordinates)
-    binding.pry
     if (squares[0].include?(chess.finish_coordinates) || squares[1].include?(chess.finish_coordinates)) && (space_between_column?(chess) || space_between_row?(chess))
-    binding.pry
       if chess.finish_square == ''
         true
       elsif chess.finish_square.which_player != player
@@ -35,7 +33,6 @@ class Rook < Piece
         false
       end
     else
-    binding.pry
       false
     end
   end

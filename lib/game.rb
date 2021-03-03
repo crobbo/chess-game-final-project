@@ -78,7 +78,8 @@ class Game
   end
   
   def castle_move(chess, player)
-    if @castle.castle_peices(chess, player) == false
+    check = whos_turn.data[:num] == 1 ? player_one_in_check : player_two_in_check 
+    if @castle.castle_peices(chess, player, check) == false
       false
     else
       true
@@ -95,7 +96,6 @@ class Game
 
   def move_piece
     unless @chess.choose_coordinates
-      binding.pry
       return castle_move(@chess, whos_turn)
     end
     store_save_variables
@@ -124,15 +124,15 @@ class Game
   end
 
   def who_plays_first
-    sleep 1.5
+    # sleep 1.5
     puts "Computer will randomly select the first player...".light_red
-    sleep 1.5
+    # sleep 1.5
     puts "Building random selection machine".blue
-    sleep 1.5
+    # sleep 1.5
     puts 'Adding magic sauce'.magenta
-    sleep 1.5
+    # sleep 1.5
     puts 'Initiating start up'.green
-    sleep 2
+    # sleep 2
     arr = [@player_one.data[:name], @player_two.data[:name]]
     name = arr.sample
     if @player_one.data[:name] == name
