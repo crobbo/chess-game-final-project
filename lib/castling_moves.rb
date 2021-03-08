@@ -45,13 +45,13 @@ class Castling
   end
 
   def king_first_move?(king)
-    king.first_move? ? true : false
+    king.first_move ? true : false
   end
 
   def rook_first_move?(rook)
     return false if rook == false
 
-    rook.first_move? ? true : false
+    rook.first_move ? true : false
   end
 
   def return_rook(board, player)
@@ -65,8 +65,8 @@ class Castling
   end
   
   def empty_squares?(board, player, rook, king)
-    row = player.data[:num] == 1 ? 0 : 7
-    squares_between = board.index(rook).zero? ? board[row].slice(board.index(rook) + 1, board.index(king)) : board[row].slice(board.index(king) + 1, board.index(rook))
+    row = player.data[:number] == 1 ? 0 : 7
+    squares_between = board[row].index(rook).zero? ? board[row].slice(board[row].index(rook) + 1, board[row].index(king)) : board[row].slice(board[row].index(king) + 1, board[row].index(rook))
     num_squares = 0
     squares_between.each do |square|
       num_squares += 1
