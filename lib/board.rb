@@ -161,9 +161,6 @@ class Board
     initiate_swap(pawn, piece_to_swap)
   end
 
-  ## method accepts first input if it is wrong. 
-
-
   def get_input
     input = ''
     num = 1
