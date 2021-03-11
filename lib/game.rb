@@ -31,7 +31,7 @@ class Game
     @chess.player1 = array[1]
     @player_two = array[2]
     @chess.player2 = array[2]
-    @player_once_in_check = array[3]
+    @player_one_in_check = array[3]
     @player_two_in_check = array[4]
   end
 
@@ -45,10 +45,27 @@ class Game
     loop do
       "\n"
       @chess.board_pretty_print(whos_turn)
+      binding.pry
+      if @player_one_in_check || @player_two_in_check 
+        print_check_message
+      end
       puts "\n Enter start square & finish square (Example: a1a1):"
       valid_move
-      check_for_winner
-      check?(opponents_king_coordinates) ? print_check_message : nil # improve upon this by limtiing the next players move to only moves are a king and out of check.
+      binding.pry
+      if check_self?
+        if whos_turn == @player_one
+          game_over(@player_two, @player_one)
+        else
+          game_over(@player_one, @player_two)
+        end
+      else
+        if whos_turn == @player_one
+          @player_one_in_check = false
+        else
+          @player_two_in_check = false
+        end
+      end
+      check?
       @chess.check_for_end_pawn(whos_turn, return_opponent)
       @chess.reset_variables
       set_turn
@@ -57,9 +74,9 @@ class Game
 
   def check_for_winner
     if @player_one_in_check
-      check?(opponents_king_coordinates) ? game_over(@player_two, @player_one) : @player_one_in_check = false
+      check? ? game_over(@player_two, @player_one) : @player_one_in_check = false
     elsif @player_two_in_check
-      check?(opponents_king_coordinates) ? game_over(@player_one, @player_two) : @player_two_in_check = false
+      check? ? game_over(@player_one, @player_two) : @player_two_in_check = false
     end
   end
 
@@ -71,15 +88,16 @@ class Game
   def introduction
     @chess.place_pieces
     puts 'Player 1:'
-    @player_one.ask_name
+    @player_one.ask_name  
     puts "\nPlayer 2: "
     @player_two.ask_name
     puts "#{who_plays_first} GOES FIRST!"
   end
   
   def castle_move(chess, player)
-    check = whos_turn.data[:num] == 1 ? player_one_in_check : player_two_in_check 
-    if @castle.castle_peices(chess, player, check) == false
+    check = whos_turn.data[:number] == 1 ? @player_one_in_check : @player_two_in_check
+    binding.pry
+    if @castle.castle_pieces(chess, player, check) == false
       false
     else
       true
@@ -145,7 +163,7 @@ class Game
     name.upcase
   end
 
-  def check?(king_coordinates)
+  def check?
     check = false
     @chess.board.each do |array|
       array.each do |square|
@@ -154,11 +172,32 @@ class Game
           row = @chess.board.detect { |aa| aa.include?(square) }
           @chess.start_coordinates = [row.index(square) + 1, 8 - @chess.board.index(row)]
           @chess.start_square = square
+          @chess.finish_coordinates = opponents_king_coordinates
+          @chess.finish_square = @chess.board[8 - opponents_king_coordinates[1]][opponents_king_coordinates[0] - 1]
           square.valid_move?(@chess, square.which_player) ? check = true : next
         end
       end
     end
-    check ? (whos_turn == @player_one ? @player_one_in_check = true : @player_two_in_check = true) : nil
+    check ? (whos_turn != @player_one ? @player_one_in_check = true : @player_two_in_check = true) : nil
+    check
+  end
+
+  def check_self?
+    check = false
+    @chess.board.each do |array|
+      array.each do |square|
+        next if square == '' || square.which_player == whos_turn
+        if square.which_player != whos_turn
+          row = @chess.board.detect { |aa| aa.include?(square) }
+          @chess.start_coordinates = [row.index(square) + 1, 8 - @chess.board.index(row)]
+          @chess.start_square = square
+          @chess.finish_coordinates = current_players_king_coordinates
+          @chess.finish_square = @chess.board[8 - current_players_king_coordinates[1]][current_players_king_coordinates[0] - 1]
+          square.valid_move?(@chess, square.which_player) ? check = true : next
+        end
+      end
+    end
+    check ? (whos_turn != @player_one ? @player_one_in_check = true : @player_two_in_check = true) : nil
     check
   end
 
@@ -174,6 +213,7 @@ class Game
         end
       end
     end
+    @chess.finish_coordinates
   end
 
 
@@ -193,8 +233,8 @@ class Game
   end
 
   def print_check_message
-    name = whos_turn == @player_one ? @player_two.data[:name] : @player_two.data[:name]
-    puts "#{name}'s King is in Check :/"
+    name = whos_turn.data[:name]
+    puts "   #{name}'s King is in Check".light_red
   end
 
   def set_turn

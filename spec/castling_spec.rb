@@ -325,4 +325,44 @@ describe Castling do
         end
       end
     end
+
+    describe '#find_coordinates' do
+      context 'Piece is on the board' do
+        subject(:castling_coordinates) { described_class.new }
+        let(:board) { [
+          ['', '', '', '', '', '', '', ''],
+          ['', '', '', '', '', '', '', ''],
+          ['', '',  pawn_2a, '', '', '', '', ''],
+          ['', '', '', '', '', '', '', ''],
+          ['', '', pawn_1b, pawn_1a, '', '', '', ''],
+          ['', '', '', '', '', '', '', ''],
+          ['', '', '', '', '', '', '', ''],
+          ['', '', '', '', '', '', '', '']
+        ] }
+
+        it 'returns coordinates' do
+          expect(castling_coordinates.find_coordinates(board, pawn_1a)).to eq([4, 4])
+        end
+      end
+
+      context 'Piece is on the board' do
+        subject(:castling_coordinates) { described_class.new }
+        let(:board) { [
+          ['', '', '', '', '', '', '', ''],
+          ['', '', '', '', '', '', '', ''],
+          ['', '',  pawn_2a, '', '', '', '', ''],
+          ['', '', '', '', '', '', '', ''],
+          ['', '', '', pawn_1b, '', '', '', ''],
+          ['', '', '', '', '', '', '', ''],
+          ['', '', '', '', '', '', '', ''],
+          [pawn_1a, '', '', '', '', '', '', '']
+        ] }
+
+        it 'returns coordinates' do
+          expect(castling_coordinates.find_coordinates(board, pawn_1a)).to eq([1, 1])
+        end
+      end
+    end
+
+    # describe '#which_sqaures'
 end
