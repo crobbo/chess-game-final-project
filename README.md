@@ -24,11 +24,12 @@ Features:
 
 * Choose whether to load a previous game
 * Follow the onscreen instructions
-* The game uses a numbered coordinate system to select and move pieces
-* Enter X and Y coordinate of the peice you wish to move 
-* Enter X and Y cooridnate of the square you intend to move to
+* The game uses a traditional chess coordinate system to select and move pieces. 
+* Type start and finish squares together, e.g. type 'a2a4' and press enter to move from square 'a2' to 'a4'
 * If the move is valid the Piece will be moved
+* If move not valid, game will ask to to re-enter your choice until a valid move is chosen by player.
 * Game continues until Checkmate is reached 
+* To Castle pieces, player can type the string 'castle'
 
 ### Saving and Loading Game
 
