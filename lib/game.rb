@@ -45,13 +45,11 @@ class Game
     loop do
       "\n"
       @chess.board_pretty_print(whos_turn)
-      binding.pry
       if @player_one_in_check || @player_two_in_check 
         print_check_message
       end
       puts "\n Enter start square & finish square (Example: a1a1):"
       valid_move
-      binding.pry
       if check_self?
         if whos_turn == @player_one
           game_over(@player_two, @player_one)
@@ -96,7 +94,6 @@ class Game
   
   def castle_move(chess, player)
     check = whos_turn.data[:number] == 1 ? @player_one_in_check : @player_two_in_check
-    binding.pry
     if @castle.castle_pieces(chess, player, check) == false
       false
     else

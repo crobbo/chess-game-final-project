@@ -30,8 +30,7 @@ describe King do
       let(:start_coordinates) { [1, 1] }
 
       it 'returns array of possible moves' do
-        # expect(king_moves.possible_moves(start_coordinates)).to include([2, 1], [2, 2], [1, 2])
-        expect(king_moves.possible_moves())
+        expect(king_moves.possible_moves(start_coordinates)).to include([2, 1], [2, 2], [1, 2])
       end
     end
 

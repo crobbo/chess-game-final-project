@@ -5,15 +5,6 @@ require_relative '../lib/pawn'
 require_relative '../lib/board'
 require 'pry'
 
-# let(:board) { [[rook_1a, '', '', king_1, '', '', '', ''],
-#   ['', '', pawn_1a, pawn_1b, '', '', '', rook_1b],
-#   ['', '', '', '', '', '', '', ''],
-#   ['', '', '', '', '', '', '', ''],
-#   ['', '', pawn_2a, pawn_2b, '', '', '', ''],
-#   ['', '', '', '', '', '', '', rook_2a],
-#   [rook_1a, '', '', '', '', '', '', ''],
-#   ['', '', '', '', '', king_2, '', '']] }
-
 describe Castling do
 
   let(:player_one) { instance_double(Player, data: {name: 'Amy', number: 1}) }
@@ -267,7 +258,7 @@ describe Castling do
         ] }
 
         it 'returns true' do
-          expect(spaces_between.empty_squares?(board, player_one, rook_1a, king_1)).to eq(true)
+          expect(spaces_between.empty_squares?(board, player_one, king_1, rook_1a)).to eq(true)
         end
       end
 
@@ -285,7 +276,7 @@ describe Castling do
         ] }
 
         it 'returns true' do
-          expect(spaces_between.empty_squares?(board, player_one, rook_1b, king_1)).to eq(true)
+          expect(spaces_between.empty_squares?(board, player_one, king_1, rook_1b,)).to eq(true)
         end
       end
 
@@ -303,7 +294,7 @@ describe Castling do
         ] }
 
         it 'returns false' do
-          expect(spaces_between.empty_squares?(board, player_one, rook_1a, king_1)).to eq(false)
+          expect(spaces_between.empty_squares?(board, player_one, king_1, rook_1a)).to eq(false)
         end
       end
 
@@ -321,7 +312,7 @@ describe Castling do
         ] }
 
         it 'returns false' do
-          expect(spaces_between.empty_squares?(board, player_one, rook_1b, king_1)).to eq(false)
+          expect(spaces_between.empty_squares?(board, player_one, king_1, rook_1b)).to eq(false)
         end
       end
     end
@@ -332,7 +323,7 @@ describe Castling do
         let(:board) { [
           ['', '', '', '', '', '', '', ''],
           ['', '', '', '', '', '', '', ''],
-          ['', '',  pawn_2a, '', '', '', '', ''],
+          ['', '', pawn_2a, '', '', '', '', ''],
           ['', '', '', '', '', '', '', ''],
           ['', '', pawn_1b, pawn_1a, '', '', '', ''],
           ['', '', '', '', '', '', '', ''],

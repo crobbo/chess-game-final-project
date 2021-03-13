@@ -39,7 +39,7 @@ class Castling
   def castle_pieces(chess, player, check)
     find_king(chess.board, player)
     find_rook(chess.board, player)
-    binding.pry
+    # binding.pry
     return false if check == true
     # binding.pry
     return false unless king_first_move?(@king)
@@ -47,12 +47,12 @@ class Castling
     return false unless rook_first_move?(return_rook(chess.board, player))
     # binding.pry
     return false unless empty_squares?(chess.board, player, @king, @rook)
-    binding.pry
     return false if empty_squares_attacked?(chess, chess.board, player)
-    move_pieces(@king, @rook, )
+    move_pieces(@king, @rook, chess.board, player)
   end
 
-  def move_pieces(king, rook, board)
+  def move_pieces(king, rook, board, player)
+    binding.pry
     start_row = player.data[:number] == 1 ? 0 : 7
     king_index = board[start_row].index(@king)
     rook_index = board[start_row].index(@rook) 
@@ -67,6 +67,7 @@ class Castling
       board[start_row][king_index + 1] = @rook
       board[start_row][7] = ''
     end
+    binding.pry
   end
   
   def king_first_move?(king)
@@ -98,7 +99,7 @@ class Castling
     numbers = { a: 1, b: 2, c: 3, d: 4, e: 5, f: 6, g: 7, h: 8 }
     string_split = string.split(//)
     coordinates = [numbers[string_split[0].to_sym], string_split[1].to_i]
-    @rook = board[8- coordinates[0]][coordinates[1] - 1]
+    @rook = board[8 - coordinates[1]][coordinates[0] - 1]
   end
   
   def empty_squares?(board, player, king, rook)
@@ -140,7 +141,7 @@ class Castling
     if row.zero?
       board[row].index(rook).zero? ? [[3, 8], [4, 8]] : [[6, 8], [7, 8]]
     else
-      board[row].index(rook).zero? ? [[3, 8], [4, 8]] : [[6, 8], [7, 8]]
+      board[row].index(rook).zero? ? [[2, 1], [3, 1]] : [[5, 1], [6, 1]]
     end
   end
 
