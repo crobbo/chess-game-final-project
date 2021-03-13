@@ -2,6 +2,8 @@
 
 A final project completed as part of the The Odin Projects Ruby Course.
 
+![ezgif-3-3e23bc000c0f](https://user-images.githubusercontent.com/47796704/111031271-8a4a7780-83fe-11eb-8eae-23663cbd8df0.gif)
+
 Features: 
 - Block illegal moves
 - Show correct error messages 
