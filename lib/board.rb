@@ -99,14 +99,24 @@ class Board
       invalid_input
       user_input
     end
+    binding.pry
     input.upcase == 'SAVE' ? @save_value = true : convert_to_numbers(input)
   end
-
+  
   def check_input(string)
     return true if string.downcase == 'castle'
 
-    string.length == 4 ? true : false
+    alphabet = 'abcdefg'.split(//)
+    numbers = [1, 2, 3, 4, 5, 6, 7, 8]
+    if string.length == 4 
+      if alphabet.include?(string[0].downcase) && alphabet.include?(string[2].downcase) && numbers.include?(string[1].to_i) && numbers.include?(string[3].to_i) && string[0] == string[0].downcase && string[2] == string[2].downcase && string[1] 
+        true
+      else
+       false
+      end
+    end
   end
+
 
   def invalid_input
     puts "Invalid input. Try again:"
@@ -123,6 +133,7 @@ class Board
 
 
   def set_start_finish_squares(start, finish)
+    binding.pry
     @start_square = @board[8- @start_coordinates[1]][@start_coordinates[0] - 1]
     @finish_square = @board[8- @finish_coordinates[1]][@finish_coordinates[0]- 1]
   end

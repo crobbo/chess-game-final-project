@@ -5,7 +5,6 @@ require_relative 'save_load'
 require_relative 'castling_moves'
 require 'colorize'
 
-# Controls the gameplay
 class Game
 
   def initialize(player1, player2, board_class = Board.new(player1, player2))
