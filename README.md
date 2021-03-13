@@ -41,5 +41,4 @@ Features:
 ### Improvements 
 
 * Integrate computer AI
-* Improve UI of gameplay / board
 * Re-factor code & make the code more modular. 
