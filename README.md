@@ -1,3 +1,7 @@
+
+## Warning
+This was written whilst I was learning to code and the whole thing needs a re-write 😆 It's not a reflection of my current programming ability but I'm leaving this on here as I was chuffed with this project when I first completed it. 
+
 # Chess
 
 A final project completed as part of the The Odin Projects Ruby Course.
